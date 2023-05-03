@@ -11,7 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Tile, Tiles } from './board/Tile';
+import Tiles from './tile/Tiles';
 
 function App(): JSX.Element {
 
@@ -20,6 +20,7 @@ function App(): JSX.Element {
   return (
     <View>
       <Text style={{fontSize: 40, fontWeight: 'bold'}}>
+        {}
       </Text>
     </View>
   )
