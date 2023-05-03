@@ -11,14 +11,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Tiles } from './board/Tile';
+import { Tile, Tiles } from './board/Tile';
 
 function App(): JSX.Element {
 
+  const json = Tiles.B.toJSON();
+
   return (
     <View>
-      <Text>
-        {Tiles.B.toJSON()}
+      <Text style={{fontSize: 40, fontWeight: 'bold'}}>
       </Text>
     </View>
   )
