@@ -79,4 +79,8 @@ export default class Stack {
             }
         }
     }
+
+    public toString(): string {
+        return JSON.stringify(this);
+    }
 }

@@ -11,16 +11,18 @@ import {
   Text,
   View,
 } from 'react-native';
-import Tiles from './objects/tile/Tiles';
+import Tiles from '../objects/tile/Tiles';
+import Stack from '../objects/stack/Stack';
 
 function App(): JSX.Element {
 
-  const json = Tiles.B.toJSON();
+  const stack: Stack = new Stack();
+  stack.populate();
 
   return (
     <View>
       <Text style={{fontSize: 40, fontWeight: 'bold'}}>
-        {}
+        {stack.toString()}
       </Text>
     </View>
   )
