@@ -1,16 +1,9 @@
 import React from 'react';
+import Square from './Square';
 
-const Board = () => {
+class Board {
 
-
-    
-
-    const Squares = [
-        
-    ];
-
-
-
+    public squares: Square[][] = [[new Square(0,0)], [new Square(0,0), new Square(0,0)]];
 
 }
 
