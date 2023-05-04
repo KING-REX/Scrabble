@@ -11,7 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Tiles from './tile/Tiles';
+import Tiles from './objects/tile/Tiles';
 
 function App(): JSX.Element {
 
