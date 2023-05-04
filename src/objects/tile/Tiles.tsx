@@ -1,6 +1,8 @@
 import Tile from './Tile'
 
 const Tiles = {
+    BLANK: new Tile("", 0),
+
     A: new Tile('A', 1),
 
     B: new Tile('B', 3),
