@@ -17,14 +17,12 @@ export default class Square {
         y: 0
     }
     private __tile: Tile | null;
-    private __isOccupied: boolean;
 
     constructor(type?: SquareType, coordinateX?: number, coordinateY?: number) {
         this.__type = type ?? SquareType.NONE;
         this.__coordinates.x = coordinateX!;
         this.__coordinates.y = coordinateY!;
         this.__tile = null;
-        this.__isOccupied = false;
     }
 
     public static getWidth(): number {
@@ -61,13 +59,13 @@ export default class Square {
     }
 
     public getTileIfOccupied(): Tile | void {
-        if(this.__tile !== null) {
-            return this.__tile;
+        if(this.isOccupied()) {
+            return this.__tile!;
         }
     }
 
     public putTile(tile: Tile): void {
-        if(this.__tile === null)
+        if(!this.isOccupied())
             this.__tile = tile;
     }
 
@@ -77,5 +75,9 @@ export default class Square {
 
     public removeTile(): void {
         this.__tile = null;
+    }
+
+    public isOccupied(): boolean {
+        return this.__tile !== null;
     }
 }
