@@ -1,3 +1,5 @@
+import Tile from "../tile/Tile";
+
 enum SquareType {
     NONE,
     DOUBLE_LETTER,
@@ -14,11 +16,15 @@ export default class Square {
         x: 0,
         y: 0
     }
+    private __tile: Tile | null;
+    private __isOccupied: boolean;
 
     constructor(type?: SquareType, coordinateX?: number, coordinateY?: number) {
         this.__type = type ?? SquareType.NONE;
         this.__coordinates.x = coordinateX!;
         this.__coordinates.y = coordinateY!;
+        this.__tile = null;
+        this.__isOccupied = false;
     }
 
     public static getWidth(): number {
@@ -47,5 +53,29 @@ export default class Square {
 
     public getCoordinates(): {x: number, y: number} {
         return this.__coordinates;
+    }
+
+    public setCoordinates(x: number, y: number): void {
+        this.__coordinates.x = x;
+        this.__coordinates.y = y;
+    }
+
+    public getTileIfOccupied(): Tile | void {
+        if(this.__tile !== null) {
+            return this.__tile;
+        }
+    }
+
+    public putTile(tile: Tile): void {
+        if(this.__tile === null)
+            this.__tile = tile;
+    }
+
+    public forceTile(tile: Tile): void {
+        this.__tile = tile;
+    }
+
+    public removeTile(): void {
+        this.__tile = null;
     }
 }
