@@ -1,4 +1,4 @@
-import Square from './Square';
+import Square from '../square/Square';
 
 class Board {
 
