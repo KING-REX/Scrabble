@@ -1,7 +1,7 @@
 import Tile from './Tile';
 
 const Tiles = {
-    BLANK: new Tile("", 0),
+    BLANK: new Tile("BLANK", 0),
 
     A: new Tile('A', 1),
 

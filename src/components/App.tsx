@@ -7,6 +7,9 @@
 
 import React from 'react';
 import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -16,35 +19,54 @@ import Stack from '../objects/stack/Stack';
 
 function App(): JSX.Element {
 
+  //This is just to test to see whether things are working out fine!
+  //The gui alternative for console.log()...
+  //This is not the main design !!!
+
+
   const stack: Stack = new Stack();
   stack.populate();
 
-  return (
-    <View>
-      <Text style={{fontSize: 40, fontWeight: 'bold'}}>
-        {stack.toString()}
-      </Text>
-    </View>
-  )
+  const [stackTiles, setStackTiles] = React.useState(stack.getTiles());
 
+  return (
+    <FlatList
+      keyExtractor={(item, index) => index.toString()}
+      refreshControl={<RefreshControl refreshing={false} onRefresh={()=>{}} />}
+      data={stackTiles}
+      renderItem={({item})=>{
+        return (
+          <View style={styles.tile}>
+            <Text style={styles.tileText}>{item?.toString()}</Text>
+          </View>
+        )
+      }}
+    />
+  )
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  text: {
+    fontSize: 40,
+    fontWeight: 'bold',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  tile: {
+    height: 50,
+    margin: 10,
+    marginTop: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+    shadowColor: '#000',
+    elevation: 5,
+    backgroundColor: '#fff',
+    flex: 1,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  tileText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
   },
 });
 
