@@ -1,3 +1,4 @@
+import Stack from "../stack/Stack";
 import Tile from "../tile/Tile";
 
 type RackTile = Tile | null;
@@ -24,7 +25,7 @@ export default class Rack {
         this.__tiles.splice(index, 1, null);
     }
 
-    public populate(): void {
+    public populate(stack: Stack): void {
         
     }
 }

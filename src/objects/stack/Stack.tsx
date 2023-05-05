@@ -1,3 +1,4 @@
+import UnsupportedException from "../../error/UnsupportedException";
 import Tile from "../tile/Tile";
 import Tiles from "../tile/Tiles";
 
@@ -35,26 +36,53 @@ enum TileCount {
 
 type StackTile = Tile | null;
 
+type random = keyof typeof TileCount[];
+
 export default class Stack {
+    private __allTilesCount: {tiles: string[], tileCounts: (string | TileCount)[]} = {
+        tiles: Object.keys(TileCount),
+        tileCounts: (Object.values(TileCount).filter((obj)=>(!isNaN(Number(obj)))))
+    } 
     private __tiles: StackTile[];
     private static LENGTH: number = 100;
+    private __stackLength: number;
 
     constructor() {
         this.__tiles = new Array(Stack.LENGTH);
         this.__tiles.fill(null);
+        this.__stackLength = this.__tiles.length;
+    }
+
+    public getRandomTileFromStack(): Tile | UnsupportedException {
+        if(this.getStackLength() === 0)
+            throw new UnsupportedException("Stack is Empty!");
+
+        let tile: StackTile = null;
+        while(!tile) {
+            let randomTilePosition = Math.floor(Math.random() * Stack.LENGTH + 1);
+            tile = this.removeTile(randomTilePosition);
+        }
+
+        return tile;
     }
 
     public getTiles(): StackTile[] {
         return this.__tiles;
     }
 
-    public addTile(tile: Tile): void {
-        if(this.__tiles.length < Stack.LENGTH)
-            this.__tiles.push(tile);
+    // public addTile(tile: Tile): void {
+    //     if(this.__tiles.length < Stack.LENGTH)
+    //         this.__tiles.push(tile);
+    // }
+
+    public removeTile(index: number): StackTile {
+        let tile: StackTile = this.__tiles.splice(index, 1, null)[0];
+        tile?this.__stackLength--:undefined;
+        return tile;
     }
 
-    public removeTile(index: number): void {
-        this.__tiles.splice(index, 1, null);
+    public getStackLength(): number {
+        return this.__stackLength;
     }
 
     public populate(): void {
