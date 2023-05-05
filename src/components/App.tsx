@@ -14,7 +14,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import Tiles from '../objects/tile/Tiles';
 import Stack from '../objects/stack/Stack';
 
 function App(): JSX.Element {
