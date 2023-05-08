@@ -1,6 +1,6 @@
 import ChallengeNotFoundException from "../../errors/ChallengeNotFoundException";
 import Challenge from "../challenge/Challenge";
-import Game from "../game/Game";
+import Game, { GameType } from "../game/Game";
 
 export default class Player {
     private __score: number = 0;
@@ -41,5 +41,10 @@ export default class Player {
         if(!this.__unacceptedChallenges.includes(challenge))
             throw new ChallengeNotFoundException("Selected challenge not found!");
         this.__unacceptedChallenges.splice(this.__unacceptedChallenges.indexOf(challenge), 1);
+        
+        challenge.challengeAccepted();
+
+        this.addGameToOngoingGames(new Game(GameType.HumanVHuman, challenge.getChallengeFrom(), 
+            challenge.getChallengeTo()));
     }
 }

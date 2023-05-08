@@ -1,9 +1,10 @@
 import Player from "../player/Player";
 
-enum GameType {
+export enum GameType {
     HumanVHuman,
     HumanVAI,
-    AIVAI
+    AIVAI,
+    HumanVSelf,
 }
 
 export default class Game {

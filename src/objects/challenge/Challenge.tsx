@@ -12,4 +12,24 @@ export default class Challenge {
         this.__dateInitiated = new Date();
         this.__challengeAccepted = false;
     }
+
+    public getChallengeFrom(): Player {
+        return this.__challengeFrom;
+    }
+
+    public setChallengeFrom(challengeFrom: Player): void {
+        this.__challengeFrom = challengeFrom;
+    }
+
+    public getChallengeTo(): Player {
+        return this.__challengeTo;
+    }
+
+    public setChallengeTo(challengeTo: Player): void {
+        this.__challengeTo = challengeTo;
+    }
+
+    public challengeAccepted(): void {
+        this.__challengeAccepted = true;
+    }
 }
