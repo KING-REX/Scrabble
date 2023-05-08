@@ -1,5 +1,5 @@
-import Stack from "../stack/Stack";
-import Tile from "../tile/Tile";
+import Stack from "../stack/StackObject";
+import Tile from "../tile/TileObject";
 
 type RackTile = Tile | null;
 

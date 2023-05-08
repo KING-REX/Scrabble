@@ -1,5 +1,5 @@
 import UnsupportedException from "../../errors/UnsupportedException";
-import Tile from "../tile/Tile";
+import Tile from "../tile/TileObject";
 import Tiles from "../tile/Tiles";
 
 type TilesKey = keyof typeof Tiles;
@@ -99,7 +99,7 @@ export default class Stack {
             let tileCountKey = tileCountKeys[keyCounter];
             let tileCountValue: number = Number(tileCountValues[keyCounter]);
 
-            this.__tiles[i] = Tiles[tileCountKey as TilesKey];
+            this.__tiles[i] = Tiles[tileCountKey as TilesKey].tile;
 
             if(counter === tileCountValue - 1) {
                 counter = -1;

@@ -1,59 +1,142 @@
-import Tile from './Tile';
+import Tile from './TileObject';
+
+
 
 const Tiles = {
-    BLANK: new Tile("BLANK", 0),
+    BLANK: {
+        tile: new Tile("BLANK", 0),
+        image: require("../../../resources/images/tiles/BLANK.jpg"),
+    },
 
-    A: new Tile('A', 1),
+    A: {
+        tile: new Tile('A', 1),
+        image: require("../../../resources/images/tiles/A.jpg"),
+    },
 
-    B: new Tile('B', 3),
+    B: {
+        tile: new Tile('B', 3),
+        image: require("../../../resources/images/tiles/B.jpg"),
+    },
 
-    C: new Tile('C', 3),
+    C: {
+        tile: new Tile('C', 3),
+        image: require("../../../resources/images/tiles/C.jpg"),
+    },
 
-    D: new Tile('D', 2),
+    D: {
+        tile: new Tile('D', 2),
+        image: require("../../../resources/images/tiles/D.jpg"),
+    },
 
-    E: new Tile('E', 1),
+    E: {
+        tile: new Tile('E', 1),
+        image: require("../../../resources/images/tiles/E.jpg"),
+    },
 
-    F: new Tile('F', 4),
+    F: {
+        tile: new Tile('F', 4),
+        image: require("../../../resources/images/tiles/F.jpg"),
+    },
 
-    G: new Tile('G', 2),
+    G: {
+        tile: new Tile('G', 2),
+        image: require("../../../resources/images/tiles/G.jpg"),
+    },
 
-    H: new Tile('H', 4),
+    H: {
+        tile: new Tile('H', 4),
+        image: require("../../../resources/images/tiles/H.jpg"),
+    },
 
-    I: new Tile('I', 1),
+    I: {
+        tile: new Tile('I', 1),
+        image: require("../../../resources/images/tiles/I.jpg"),
+    },
 
-    J: new Tile('J', 8),
+    J: {
+        tile: new Tile('J', 8),
+        image: require("../../../resources/images/tiles/J.jpg"),
+    },
 
-    K: new Tile('K', 5),
+    K: {
+        tile: new Tile('K', 5),
+        image: require("../../../resources/images/tiles/K.jpg"),
+    },
 
-    L: new Tile('L', 1),
+    L: {
+        tile: new Tile('L', 1),
+        image: require("../../../resources/images/tiles/L.jpg"),
+    },
 
-    M: new Tile('M', 3),
+    M: {
+        tile: new Tile('M', 3),
+        image: require("../../../resources/images/tiles/M.jpg"),
+    },
 
-    N: new Tile('N', 1),
+    N: {
+        tile: new Tile('N', 1),
+        image: require("../../../resources/images/tiles/N.jpg"),
+    },
 
-    O: new Tile('O', 1),
+    O: {
+        tile: new Tile('O', 1),
+        image: require("../../../resources/images/tiles/O.jpg"),
+    },
 
-    P: new Tile('P', 3),
+    P: {
+        tile: new Tile('P', 3),
+        image: require("../../../resources/images/tiles/P.jpg"),
+    },
 
-    Q: new Tile('Q', 10),
+    Q: {
+        tile: new Tile('Q', 10),
+        image: require("../../../resources/images/tiles/Q.jpg"),
+    },
 
-    R: new Tile('R', 1),
+    R: {
+        tile: new Tile('R', 1),
+        image: require("../../../resources/images/tiles/R.jpg"),
+    },
 
-    S: new Tile('S', 1),
+    S: {
+        tile: new Tile('S', 1),
+        image: require("../../../resources/images/tiles/S.jpg"),
+    },
 
-    T: new Tile('T', 1),
+    T: {
+        tile: new Tile('T', 1),
+        image: require("../../../resources/images/tiles/T.jpg"),
+    },
 
-    U: new Tile('U', 1),
+    U: {
+        tile: new Tile('U', 1),
+        image: require("../../../resources/images/tiles/U.jpg"),
+    },
 
-    V: new Tile('V', 4),
+    V: {
+        tile: new Tile('V', 4),
+        image: require("../../../resources/images/tiles/V.jpg"),
+    },
 
-    W: new Tile('W', 4),
+    W: {
+        tile: new Tile('W', 4),
+        image: require("../../../resources/images/tiles/W.jpg"),
+    },
 
-    X: new Tile('X', 8),
+    X: {
+        tile: new Tile('X', 8),
+        image: require("../../../resources/images/tiles/X.jpg"),
+    },
 
-    Y: new Tile('Y', 4),
+    Y: {
+        tile: new Tile('Y', 4),
+        image: require("../../../resources/images/tiles/Y.jpg"),
+    },
 
-    Z: new Tile('Z', 10)
+    Z: {
+        tile: new Tile('Z', 10),
+        image: require("../../../resources/images/tiles/Z.jpg"),
+    },
 };
 
 export default Tiles;

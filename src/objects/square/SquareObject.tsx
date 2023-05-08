@@ -1,4 +1,4 @@
-import Tile from "../tile/Tile";
+import Tile from "../tile/TileObject";
 
 enum SquareType {
     NONE,

@@ -1,10 +1,34 @@
 import React from 'react';
-import { View } from 'react-native';
+import { 
+    View, 
+    ImageBackground,
+    StyleSheet,
+    Text
+} from 'react-native';
+import Tile from '../objects/tile/TileObject';
+import Tiles from '../objects/tile/Tiles';
+import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
+import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-function TileComponent(): JSX.Element {
+type TileComponentProps = {
+    style?: StyleProp<ViewStyle> | undefined,
+    tile: Tile,
+    tileWidth: number,
+    tileHeight: number,
+}
+
+export default function TileComponent({ style, tile, tileWidth, tileHeight }: TileComponentProps): JSX.Element {
+
     return (
-        <View>
-            
-        </View>
+        <ImageBackground
+            source={tile.getImage()}
+            style={[style, {width: tileWidth, height: tileHeight}]}
+            resizeMode='stretch'
+        >
+            {/* <Text>{Platform.OS}</Text> */}
+        </ImageBackground>
     )
 }
+
+const styles = StyleSheet.create({
+})

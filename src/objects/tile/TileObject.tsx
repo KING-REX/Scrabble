@@ -1,7 +1,11 @@
+import Tiles from "./Tiles";
+
 type letter = "BLANK" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" 
     | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 
 type value = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
+type TilesKey = keyof typeof Tiles;
 
 interface TileInterface {
     getLetter(): letter;
@@ -28,6 +32,10 @@ export default class Tile implements TileInterface {
         return this.__letter;
     }
 
+    public getLetterAsString(): string {
+        return this.__letter;
+    }
+
     public setLetter(letter: letter): void {
         this.__letter = letter;
     }
@@ -38,6 +46,10 @@ export default class Tile implements TileInterface {
 
     public setValue(value: value): void {
         this.__value = value;
+    }
+
+    public getImage() {
+        return Tiles[this.getLetter() as TilesKey].image;
     }
 
     public static fromJSON(json: any): Tile {
