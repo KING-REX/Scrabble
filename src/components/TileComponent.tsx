@@ -6,7 +6,7 @@ import {
     Text
 } from 'react-native';
 import Tile from '../objects/tile/TileObject';
-import Tiles from '../objects/tile/Tiles';
+import Tiles, { getTileImage } from '../objects/tile/Tiles';
 import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 
@@ -21,7 +21,7 @@ export default function TileComponent({ style, tile, tileWidth, tileHeight }: Ti
 
     return (
         <ImageBackground
-            source={tile.getImage()}
+            source={getTileImage(tile)}
             style={[style, {width: tileWidth, height: tileHeight}]}
             resizeMode='stretch'
         >

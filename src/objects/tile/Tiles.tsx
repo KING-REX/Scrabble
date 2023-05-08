@@ -1,6 +1,5 @@
 import Tile from './TileObject';
-
-
+import { ImageSourcePropType } from "react-native/types";
 
 const Tiles = {
     BLANK: {
@@ -138,5 +137,9 @@ const Tiles = {
         image: require("../../../resources/images/tiles/Z.jpg"),
     },
 };
+
+export const getTileImage = (tile: Tile): ImageSourcePropType => {
+    return Tiles[tile.getLetter()].image;
+}
 
 export default Tiles;
