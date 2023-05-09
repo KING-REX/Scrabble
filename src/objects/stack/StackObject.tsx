@@ -22,7 +22,7 @@ enum TileCount {
     N = 6,
     O = 8,
     P = 2,
-    Q = 10,
+    Q = 1,
     R = 6,
     S = 4,
     T = 6,
