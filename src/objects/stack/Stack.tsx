@@ -1,5 +1,5 @@
 import UnsupportedException from "../../errors/UnsupportedException";
-import Tile from "../tile/TileObject";
+import Tile from "../tile/Tile";
 import Tiles from "../tile/Tiles";
 
 type TilesKey = keyof typeof Tiles;

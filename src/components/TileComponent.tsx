@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text
 } from 'react-native';
-import Tile from '../objects/tile/TileObject';
+import Tile from '../objects/tile/Tile';
 import { getTileImage } from '../objects/tile/Tiles';
 import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';

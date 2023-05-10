@@ -13,7 +13,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Stack from '../objects/stack/StackObject';
+import Stack from '../objects/stack/Stack';
 import TileComponent from './TileComponent';
 import { Shadow } from 'react-native-shadow-2';
 

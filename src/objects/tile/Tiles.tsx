@@ -1,4 +1,4 @@
-import Tile from './TileObject';
+import Tile from './Tile';
 import { ImageSourcePropType } from "react-native/types";
 
 const Tiles = {
