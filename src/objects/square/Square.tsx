@@ -9,8 +9,7 @@ enum SquareType {
 }
 
 export default class Square {
-    private static __width: number = 0;
-    private static __height: number = 0;
+    private static __length: number = 0;
     private __type: SquareType;
     private __coordinates: {x: number, y: number} = {
         x: 0,
@@ -18,27 +17,19 @@ export default class Square {
     }
     private __tile: Tile | null;
 
-    constructor(type?: SquareType, coordinateX?: number, coordinateY?: number) {
+    constructor(length?: number, type?: SquareType, coordinateX?: number, coordinateY?: number) {
         this.__type = type ?? SquareType.NONE;
-        this.__coordinates.x = coordinateX!;
-        this.__coordinates.y = coordinateY!;
+        this.__coordinates.x = coordinateX ?? this.__coordinates.x;
+        this.__coordinates.y = coordinateY ?? this.__coordinates.y;
         this.__tile = null;
     }
 
-    public static getWidth(): number {
-        return Square.__width;
+    public static getLength(): number {
+        return Square.__length;
     }
 
-    public static setWidth(width: number): void {
-        Square.__width = width;
-    }
-
-    public static getHeight(): number {
-        return Square.__height;
-    }
-
-    public static setHeight(height: number): void {
-        Square.__height = height;
+    public static setLength(length: number): void {
+        Square.__length = length;
     }
 
     public getType(): SquareType {

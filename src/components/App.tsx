@@ -16,6 +16,7 @@ import {
 import Stack from '../objects/stack/Stack';
 import TileComponent from './TileComponent';
 import { Shadow } from 'react-native-shadow-2';
+import SquareComponent from './SquareComponent';
 
 function App(): JSX.Element {
 
@@ -32,136 +33,12 @@ function App(): JSX.Element {
   const [counter, setCounter] = React.useState(0);
 
   return (
-    <FlatList
-      keyExtractor={(item, index) => index.toString()}
-      refreshControl={<RefreshControl refreshing={false} onRefresh={()=>{}} />}
-      data={stackTiles}
-      style={styles.flatList}
-      numColumns={4}
-      renderItem={({item})=>{
-        
-        return (
-          // <View style={styles.tile}>
-          //   <Text style={styles.tileText}>{item?.toString()}</Text>
-          // </View>
-          <TileComponent
-            tile={item}
-            tileHeight={70}
-            tileWidth={70}
-            addShadow
-          />
-        )
-      }}
-    />
-
-    // <ScrollView
+    <SquareComponent
+      bgColor={'#ddd'}
+      length={10}
+    >
       
-    // >
-    //   <View style={styles.tileContainer}>
-    //     <TileComponent
-    //       tile={Tiles.A.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.B.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.C.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.D.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //   </View>
-    //   <View style={styles.tileContainer}>
-    //     <TileComponent
-    //       tile={Tiles.E.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.F.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.G.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.H.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //   </View>
-    //   <View style={styles.tileContainer}>
-    //     <TileComponent
-    //       tile={Tiles.A.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.B.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.C.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.D.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //   </View>
-    //   <View style={styles.tileContainer}>
-    //     <TileComponent
-    //       tile={Tiles.A.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.B.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.C.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //     <TileComponent
-    //       tile={Tiles.D.tile}
-    //       tileWidth={70}
-    //       tileHeight={70}
-    //       addShadow
-    //     />
-    //   </View>
-    // </ScrollView>
+    </SquareComponent>
   )
 }
 
