@@ -17,6 +17,7 @@ import Stack from '../objects/stack/Stack';
 import TileComponent from './TileComponent';
 import { Shadow } from 'react-native-shadow-2';
 import SquareComponent from './SquareComponent';
+import BoardComponent from './BoardComponent';
 
 function App(): JSX.Element {
 
@@ -33,11 +34,7 @@ function App(): JSX.Element {
   const [counter, setCounter] = React.useState(0);
 
   return (
-    <SquareComponent
-      bgColor={'#ddd'}
-    >
-      
-    </SquareComponent>
+    <BoardComponent></BoardComponent>
   )
 }
 

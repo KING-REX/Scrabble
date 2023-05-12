@@ -1,21 +1,30 @@
 import { ColorValue, View } from "react-native";
-import Square from "../objects/square/Square";
+import Square, { SquareType } from "../objects/square/Square";
+import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
+import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 type SquareComponentProps = {
     bgColor: ColorValue,
     length?: number,
     children?: React.ReactNode,
+    square: Square,
+    style?: StyleProp<ViewStyle> | undefined,
 }
 
-export default function SquareComponent({bgColor, length, children}: SquareComponentProps): JSX.Element {
+export default function SquareComponent({bgColor, length, children, square, style}: SquareComponentProps): JSX.Element {
 
-    Square.setLength(length ?? 50);
+    Square.setLength(length ?? 20);
 
-    return (
-        <View
-            style={{backgroundColor: bgColor, height: Square.getLength(), width: Square.getLength()}}
-        >
-            {children}
-        </View>
-    )
+    switch(square.getType()) {
+        case SquareType.NONE:
+            return(
+                <View
+                    style={[style, {backgroundColor: bgColor, height: Square.getLength(), width: Square.getLength()}]}
+                >
+                    {children}
+                </View>
+            )
+        default:
+            return <View></View>
+    }
 }

@@ -1,6 +1,6 @@
 import Tile from "../tile/Tile";
 
-enum SquareType {
+export enum SquareType {
     NONE,
     DOUBLE_LETTER,
     DOUBLE_WORD,
