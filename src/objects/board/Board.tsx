@@ -2,9 +2,7 @@ import Square from '../square/Square';
 
 class Board {
 
-    public squares: Square[][] = [[new Square(0,0)], [new Square(0,0), new Square(0,0)]];
-
-    
+    // private __squares: Square[][];
 }
 
 export default Board;

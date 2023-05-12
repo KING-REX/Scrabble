@@ -43,6 +43,7 @@ export default function TileComponent({ style, tile, tileWidth, tileHeight, addS
         hasShadow ? 
 
         <Shadow
+            
             style={styles.tile}
             startColor='#00000050'
             endColor='#fff'

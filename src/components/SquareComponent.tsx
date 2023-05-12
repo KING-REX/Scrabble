@@ -1,4 +1,4 @@
-import { ColorValue, View } from "react-native/types";
+import { ColorValue, View } from "react-native";
 import Square from "../objects/square/Square";
 
 type SquareComponentProps = {
@@ -9,7 +9,7 @@ type SquareComponentProps = {
 
 export default function SquareComponent({bgColor, length, children}: SquareComponentProps): JSX.Element {
 
-    Square.setLength(length ?? 70);
+    Square.setLength(length ?? 50);
 
     return (
         <View

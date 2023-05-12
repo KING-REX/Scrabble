@@ -35,7 +35,6 @@ function App(): JSX.Element {
   return (
     <SquareComponent
       bgColor={'#ddd'}
-      length={10}
     >
       
     </SquareComponent>
