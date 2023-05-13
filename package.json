@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/cli-platform-android": "^11.2.3",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@types/react-native": "^0.72.0",
@@ -19,6 +20,7 @@
     "react-native-game-engine": "^1.2.0",
     "react-native-gradle-plugin": "^0.71.18",
     "react-native-inset-shadow": "^1.0.3",
+    "react-native-neomorph-shadows": "^1.1.2",
     "react-native-screens": "^3.20.0",
     "react-native-shadow-2": "^7.0.7",
     "react-native-svg": "^13.9.0"

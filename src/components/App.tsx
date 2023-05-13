@@ -42,6 +42,7 @@ function App(): JSX.Element {
       justifyContent: 'center',
       alignItems: 'center',
     }}>
+      
       <SquareComponent
         length={70}
       >
