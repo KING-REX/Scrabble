@@ -25,7 +25,7 @@ export default function BoardComponent(): JSX.Element{
                                             key={cellIndex}
                                             square={cell}
                                             bgColor={'#ddd'}
-                                            style={styles.col}
+                                            style={styles.cell}
                                         ></SquareComponent>
                                     )
                                 })
@@ -41,14 +41,17 @@ export default function BoardComponent(): JSX.Element{
 const styles = StyleSheet.create({
     board: {
         gap: 5,
-        columnGap: 5,
-        padding: 3,
-        backgroundColor: '#010101'
+        padding: 5,
+        backgroundColor: '#00f',
+        width: '100%',
     },
     row: {
+        width: '100%',
+        columnGap: 5,
         flexDirection: 'row',
         gap: 1,
     },
-    col: {
+    cell: {
+        flex: 1,
     }
 })

@@ -18,6 +18,7 @@ import TileComponent from './TileComponent';
 import { Shadow } from 'react-native-shadow-2';
 import SquareComponent from './SquareComponent';
 import BoardComponent from './BoardComponent';
+import Square from '../objects/square/Square';
 
 function App(): JSX.Element {
 
@@ -34,7 +35,19 @@ function App(): JSX.Element {
   const [counter, setCounter] = React.useState(0);
 
   return (
-    <BoardComponent></BoardComponent>
+    // <BoardComponent></BoardComponent>
+
+    <View style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+      <SquareComponent
+        length={70}
+      >
+
+      </SquareComponent>
+    </View>
   )
 }
 

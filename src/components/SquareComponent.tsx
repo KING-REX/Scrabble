@@ -4,16 +4,20 @@ import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 type SquareComponentProps = {
-    bgColor: ColorValue,
+    bgColor?: ColorValue,
     length?: number,
     children?: React.ReactNode,
-    square: Square,
+    square?: Square,
     style?: StyleProp<ViewStyle> | undefined,
 }
 
 export default function SquareComponent({bgColor, length, children, square, style}: SquareComponentProps): JSX.Element {
 
     Square.setLength(length ?? 20);
+
+    square = square ?? new Square(20, SquareType.NONE);
+
+    bgColor = bgColor ?? '#ddd';
 
     switch(square.getType()) {
         case SquareType.NONE:
