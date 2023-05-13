@@ -14,9 +14,9 @@ type SquareComponentProps = {
 
 export default function SquareComponent({bgColor, length, children, square, style}: SquareComponentProps): JSX.Element {
 
-    Square.setLength(length ?? 20);
+    Square.setLength(length ?? 23);
 
-    square = square ?? new Square(20, SquareType.NONE);
+    square = square ?? new Square(SquareType.NONE);
 
     bgColor = bgColor ?? '#ddd';
 
@@ -26,7 +26,7 @@ export default function SquareComponent({bgColor, length, children, square, styl
                 <InsetShadow
                     shadowColor='#000'
                     shadowOpacity={1}
-                    elevation={10}
+                    elevation={5}
                     right={false}
                     bottom={false}
                     containerStyle={{
@@ -36,7 +36,7 @@ export default function SquareComponent({bgColor, length, children, square, styl
                 >
                     <View
                         style={[style, {
-                            backgroundColor: '#ff0',
+                            backgroundColor: bgColor,
                         }]}
                     >
                         {children}

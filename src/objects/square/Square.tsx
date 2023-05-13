@@ -17,7 +17,7 @@ export default class Square {
     }
     private __tile: Tile | null;
 
-    constructor(length?: number, type?: SquareType, coordinateX?: number, coordinateY?: number) {
+    constructor(type?: SquareType, coordinateX?: number, coordinateY?: number) {
         this.__type = type ?? SquareType.NONE;
         this.__coordinates.x = coordinateX ?? this.__coordinates.x;
         this.__coordinates.y = coordinateY ?? this.__coordinates.y;

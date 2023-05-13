@@ -35,7 +35,14 @@ function App(): JSX.Element {
   const [counter, setCounter] = React.useState(0);
 
   return (
-    <BoardComponent></BoardComponent>
+    <View style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#0ff',
+    }}>
+      <BoardComponent></BoardComponent>
+    </View>
 
     // <View style={{
     //   flex: 1,
