@@ -2,6 +2,7 @@ import { ColorValue, View } from "react-native";
 import Square, { SquareType } from "../objects/square/Square";
 import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
+import InsetShadow from 'react-native-inset-shadow';
 
 type SquareComponentProps = {
     bgColor?: ColorValue,
@@ -22,11 +23,25 @@ export default function SquareComponent({bgColor, length, children, square, styl
     switch(square.getType()) {
         case SquareType.NONE:
             return(
-                <View
-                    style={[style, {backgroundColor: bgColor, height: Square.getLength(), width: Square.getLength()}]}
+                <InsetShadow
+                    shadowColor='#000'
+                    shadowOpacity={1}
+                    elevation={10}
+                    right={false}
+                    bottom={false}
+                    containerStyle={{
+                        height: Square.getLength(), 
+                        width: Square.getLength()
+                    }}
                 >
-                    {children}
-                </View>
+                    <View
+                        style={[style, {
+                            backgroundColor: '#ff0',
+                        }]}
+                    >
+                        {children}
+                    </View>
+                </InsetShadow>
             )
         default:
             return <View></View>
