@@ -17,11 +17,21 @@ export default class Square {
     }
     private __tile: Tile | null;
 
-    constructor(type?: SquareType, coordinateX?: number, coordinateY?: number) {
+    constructor(type?: SquareType, coordinateX?: number, coordinateY?: number, tile?: Tile) {
         this.__type = type ?? SquareType.NONE;
         this.__coordinates.x = coordinateX ?? this.__coordinates.x;
         this.__coordinates.y = coordinateY ?? this.__coordinates.y;
-        this.__tile = null;
+        this.__tile = tile ?? null;
+    }
+
+    public static createSquare(square?: Square): Square | null {
+        if(!square)
+            return null;
+        const tempSquare = new Square();
+        tempSquare.__coordinates = square.__coordinates;
+        tempSquare.__tile = square.__tile;
+        tempSquare.__type = square.__type;
+        return tempSquare;
     }
 
     public static getLength(): number {
@@ -47,6 +57,10 @@ export default class Square {
     public setCoordinates(x: number, y: number): void {
         this.__coordinates.x = x;
         this.__coordinates.y = y;
+    }
+
+    public getTile(): Tile | null {
+        return this.__tile;
     }
 
     public getTileIfOccupied(): Tile | void {

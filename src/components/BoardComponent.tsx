@@ -26,6 +26,7 @@ export default function BoardComponent(): JSX.Element{
                                             square={cell}
                                             bgColor={'#fff'}
                                             style={styles.cell}
+                                            tile={null}
                                         ></SquareComponent>
                                     )
                                 })

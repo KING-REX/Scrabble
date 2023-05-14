@@ -62,6 +62,5 @@ export default function TileComponent({ style, tile, tileWidth, tileHeight, addS
 
 const styles = StyleSheet.create({
     tile: {
-        margin: 10,
     }
 })
