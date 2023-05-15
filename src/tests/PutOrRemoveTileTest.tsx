@@ -42,6 +42,7 @@ function PutOrRemoveTileTest(): JSX.Element {
         <Pressable
             onPress={()=>{
               setPutOrRemoveTile(!putOrRemoveTile);
+              console.log("PutOrRemoveTile: " + putOrRemoveTile);
             }}
             style={({pressed})=>({
                 backgroundColor: pressed ? '#ddd' : '#0f0',
