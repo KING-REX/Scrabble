@@ -33,20 +33,23 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
     const [_square, set_Square] = React.useState(square ?? new Square(SquareType.NONE, undefined, undefined, tile ? tile : undefined));
 
     React.useEffect(()=>{
+        console.log(tile);
         updateTile(tile);
     }, [tile])
 
     bgColor = bgColor ?? '#ddd';
 
     function updateTile(tile: Tile | null) {
+        let square: Square = Square.createSquare(_square)!;
         tile ? tile.setWidth(Square.getLength()) : tile=null;
         tile ? tile.setHeight(Square.getLength()) : tile=null;
         if(tile) {
-            if(!_square.isOccupied())
-                _square.putTile(tile);
+            if(!square.isOccupied())
+                square.putTile(tile);
         }
         else
-            _square.removeTile();
+            square.removeTile();
+        set_Square(square);
     }
 
     // switch(_square.getType()) {

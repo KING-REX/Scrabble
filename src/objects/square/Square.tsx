@@ -85,8 +85,7 @@ export default class Square {
         if(this.isOccupied())
             this.removeTile();
 
-        this.updateTileWidthAndHeight(tile);
-        this.__tile = tile;
+        this.putTile(tile);
     }
 
     public removeTile(): void {

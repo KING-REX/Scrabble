@@ -16,7 +16,7 @@ function App(): JSX.Element {
   //This is not the main design !!!
 
   return (
-    <FillOrEmptyBoardSquaresTest />
+    <PutOrRemoveTileTest />
   )
 }
 
