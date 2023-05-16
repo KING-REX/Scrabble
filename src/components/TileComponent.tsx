@@ -14,19 +14,31 @@ import { Shadow } from 'react-native-shadow-2';
 type TileComponentProps = {
     style?: StyleProp<ViewStyle> | undefined,
     tile: Tile | null,
+    tileWidth: number,
+    tileHeight: number,
     addShadow?: boolean
 }
 
-export default function TileComponent({ style, tile, addShadow }: TileComponentProps): JSX.Element {
+export default function TileComponent({ style, tile, tileWidth, tileHeight, addShadow }: TileComponentProps): JSX.Element {
 
     const [hasShadow, setHasShadow] = React.useState(addShadow);
 
+    // const [_tileWidth, setTileWidth] = React.useState(tileWidth);
+
+    // const [_tileHeight, setTileHeight] = React.useState(tileHeight);
+
+    const [_tile, setTile] = React.useState(tile);
+
+    React.useLayoutEffect(()=>{
+        setTile(tile);
+    }, [tile])
+
     const contents = (): any => {
         return (
-            tile &&
+            _tile &&
             <ImageBackground
-                source={getTileImage(tile)}
-                style={[style, {width: tile.getWidth(), height: tile.getHeight()}]}
+                source={getTileImage(_tile)}
+                style={[style, {width: tileWidth, height: tileHeight}]}
                 resizeMode='stretch'
             >
                 {/* <Text>{Platform.OS}</Text> */}
@@ -36,7 +48,7 @@ export default function TileComponent({ style, tile, addShadow }: TileComponentP
 
     return (
         
-        tile &&
+        _tile &&
 
         hasShadow ? 
 

@@ -29,7 +29,7 @@ export default class Square {
             this.__tile = null;
     }
 
-    public static createSquare(square?: Square): Square | null {
+    public static cloneSquare(square?: Square): Square | null {
         if(!square)
             return null;
         const tempSquare = new Square();

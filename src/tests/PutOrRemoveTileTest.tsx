@@ -15,6 +15,7 @@ import {
 import SquareComponent from '../components/SquareComponent';
 import Tiles from '../objects/tile/Tiles';
 import Tile from '../objects/tile/Tile';
+import Square from '../objects/square/Square';
 
 function PutOrRemoveTileTest(): JSX.Element {
 
@@ -23,9 +24,20 @@ function PutOrRemoveTileTest(): JSX.Element {
   //This is not the main design !!!
 
   const [putOrRemoveTile, setPutOrRemoveTile] = React.useState(false);
+  // console.log(putOrRemoveTile);
 
-  React.useEffect(()=>{
-    console.log(putOrRemoveTile);
+  const [square, setSquare] = React.useState(new Square());
+  
+  // const updateTile = () => {
+  //   console.log("Before: " + putOrRemoveTile);
+  //   setPutOrRemoveTile(!putOrRemoveTile);
+  //   console.log("After: " + putOrRemoveTile);
+  // }
+  
+  React.useLayoutEffect(()=>{
+    putOrRemoveTile ? square.putTile(Tiles.D.tile) : square.removeTile();
+    setSquare(Square.cloneSquare(square)!);
+    
   }, [putOrRemoveTile]);
 
   return (
@@ -40,15 +52,13 @@ function PutOrRemoveTileTest(): JSX.Element {
           style={{
             // marginLeft: 10,
           }}
-          tile={putOrRemoveTile ? Tiles.D.tile : null}
+          tile={square.getTile()}
+          square={square}
         >
         </SquareComponent>
         
         <Pressable
-            onPress={()=>{
-              setPutOrRemoveTile(!putOrRemoveTile);
-              // console.log("PutOrRemoveTile: " + putOrRemoveTile);
-            }}
+            onPress={()=>setPutOrRemoveTile(!putOrRemoveTile)}
             style={({pressed})=>({
                 backgroundColor: pressed ? '#ddd' : '#0f0',
                 ...styles.putOrRemoveTileBtn

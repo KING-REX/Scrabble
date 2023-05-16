@@ -13,8 +13,6 @@ export default function BoardComponent({board, length}: BoardComponentProps): JS
     
     const [_board, set_Board] = React.useState(board ?? new Board());
 
-    _board.populateBoard();
-
     return (
         <View style={styles.board}>
             {

@@ -71,6 +71,18 @@ export default class Tile implements TileInterface {
         this.__tileHeight = tileHeight;
     }
 
+    public static cloneTile(tile?: Tile | null): Tile | null {
+        if(!tile)
+            return null;
+        const tempTile = new Tile();
+        tempTile.__letter = tile.__letter;
+        tempTile.__value = tile.__value;
+        tempTile.__tileWidth = tile.__tileWidth;
+        tempTile.__tileHeight = tile.__tileHeight;
+
+        return tempTile;
+    }
+
     public static fromJSON(json: any): Tile {
         let tile: Tile = new Tile();
         tile.setLetter(json.letter);

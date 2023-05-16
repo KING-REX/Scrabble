@@ -18,7 +18,7 @@ type SquareComponentProps = {
     bgColor?: ColorValue,
     length?: number,
     children?: React.ReactNode,
-    square?: Square,
+    square: Square,
     style?: StyleProp<ViewStyle> | undefined,
     tile: Tile | null
 }
@@ -27,30 +27,22 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
 
     Square.setLength(length ?? 23);
 
-    tile ? tile.setWidth(Square.getLength()) : tile=null;
-    tile ? tile.setHeight(Square.getLength()) : tile=null;
+    if(!tile)
+        tile=square.getTile();
 
-    const [_square, set_Square] = React.useState(square ?? new Square(SquareType.NONE, undefined, undefined, tile ? tile : undefined));
+    const [_tile, setTile] = React.useState(tile);
 
-    React.useEffect(()=>{
-        console.log(tile);
-        updateTile(tile);
-    }, [tile])
-
-    bgColor = bgColor ?? '#ddd';
-
-    function updateTile(tile: Tile | null) {
-        let square: Square = Square.createSquare(_square)!;
-        tile ? tile.setWidth(Square.getLength()) : tile=null;
-        tile ? tile.setHeight(Square.getLength()) : tile=null;
-        if(tile) {
-            if(!square.isOccupied())
-                square.putTile(tile);
-        }
+    React.useLayoutEffect(()=>{
+        if(tile)
+            square!.putTile(tile);
         else
             square.removeTile();
-        set_Square(square);
-    }
+        // console.log(tile)
+        setTile(tile);
+        // console.log("Updating tile...");
+    }, [tile]);
+
+    bgColor = bgColor ?? '#ddd';
 
     // switch(_square.getType()) {
     //     case SquareType.NONE:
@@ -67,8 +59,8 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
                 shadowColor='#000'
                 shadowOpacity={1}
                 elevation={5}
-                right={_square.isOccupied() ? true : false}
-                bottom={_square.isOccupied() ? true : false}
+                right={square.isOccupied() ? true : false}
+                bottom={square.isOccupied() ? true : false}
                 containerStyle={{
                     height: Square.getLength(), 
                     width: Square.getLength()
@@ -80,7 +72,9 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
                     }]}
                 >
                     <TileComponent
-                        tile={_square.getTile()}
+                        tile={_tile}
+                        tileHeight={Square.getLength()}
+                        tileWidth={Square.getLength()}
                     />
                 </View>
             </InsetShadow>

@@ -39,8 +39,6 @@ function FillOrEmptyBoardSquaresTest(): JSX.Element {
         for(let j = 0; j < tempSquareRow.length; j++) {
           let tempSquare: Square = tempSquareRow[j];
           let tempTile: Tile;
-          /* Check out how to use try and catch (with a custom defined 
-            exception object) in typescript */
           try {
             tempTile = stack.removeTileFrom(0);
             tempSquare.putTile(tempTile);
@@ -66,7 +64,7 @@ function FillOrEmptyBoardSquaresTest(): JSX.Element {
       }
       setTilesFilled(false);
     }
-    console.log("Board[0][0] square's tile's length: " + board.getSquares()[0][0].getTile()?.toJSONString());
+    console.log("Board[10][6] square's tile's length: " + board.getSquares()[10][6].getTile()?.toJSONString());
   }
 
   return (
