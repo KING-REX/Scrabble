@@ -27,6 +27,9 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
 
     Square.setLength(length ?? 23);
 
+    tile ? tile.setWidth(Square.getLength()) : tile=null;
+    tile ? tile.setHeight(Square.getLength()) : tile=null;
+
     const [_square, set_Square] = React.useState(square ?? new Square(SquareType.NONE, undefined, undefined, tile ? tile : undefined));
 
     React.useEffect(()=>{
@@ -36,6 +39,8 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
     bgColor = bgColor ?? '#ddd';
 
     function updateTile(tile: Tile | null) {
+        tile ? tile.setWidth(Square.getLength()) : tile=null;
+        tile ? tile.setHeight(Square.getLength()) : tile=null;
         if(tile) {
             if(!_square.isOccupied())
                 _square.putTile(tile);
@@ -73,8 +78,6 @@ export default function SquareComponent({bgColor, length, square, style, tile}: 
                 >
                     <TileComponent
                         tile={_square.getTile()}
-                        tileHeight={Square.getLength()}
-                        tileWidth={Square.getLength()}
                     />
                 </View>
             </InsetShadow>

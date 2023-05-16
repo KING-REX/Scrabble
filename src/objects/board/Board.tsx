@@ -17,7 +17,7 @@ class Board {
         for(let i = 0; i < (numOfColumns ?? 15); i++) {
             squareArray[i] = [];
             for(let j = 0; j < (numOfRows ?? 15); j++) {
-                squareArray[i][j] = new Square();
+                squareArray[i][j] = new Square(undefined, i, j);
             }
         }
         return squareArray;

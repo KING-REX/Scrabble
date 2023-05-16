@@ -21,7 +21,12 @@ export default class Square {
         this.__type = type ?? SquareType.NONE;
         this.__coordinates.x = coordinateX ?? this.__coordinates.x;
         this.__coordinates.y = coordinateY ?? this.__coordinates.y;
-        this.__tile = tile ?? null;
+        if(tile) {
+            this.updateTileWidthAndHeight(tile);
+            this.__tile = tile;
+        }
+        else
+            this.__tile = null;
     }
 
     public static createSquare(square?: Square): Square | null {
@@ -70,11 +75,17 @@ export default class Square {
     }
 
     public putTile(tile: Tile): void {
-        if(!this.isOccupied())
+        if(!this.isOccupied()) {
+            this.updateTileWidthAndHeight(tile);
             this.__tile = tile;
+        }
     }
-
+    
     public forceTile(tile: Tile): void {
+        if(this.isOccupied())
+            this.removeTile();
+
+        this.updateTileWidthAndHeight(tile);
         this.__tile = tile;
     }
 
@@ -84,5 +95,10 @@ export default class Square {
 
     public isOccupied(): boolean {
         return this.__tile !== null;
+    }
+    
+    public updateTileWidthAndHeight(tile: Tile): void {
+        tile.setHeight(Square.getLength());
+        tile.setWidth(Square.getLength());
     }
 }

@@ -1,4 +1,4 @@
-import UnsupportedException from "../../errors/UnsupportedException";
+import UnsupportedOperationException from "../../errors/UnsupportedException";
 import Tile from "../tile/Tile";
 import Tiles from "../tile/Tiles";
 
@@ -34,8 +34,6 @@ enum TileCount {
     Z = 1
 }
 
-type StackTile = Tile | null;
-
 type random = keyof typeof TileCount[];
 
 export default class Stack {
@@ -43,30 +41,24 @@ export default class Stack {
         tiles: Object.keys(TileCount),
         tileCounts: (Object.values(TileCount).filter((obj)=>(!isNaN(Number(obj)))))
     } 
-    private __tiles: StackTile[];
+    private __tiles: Tile[];
     private static LENGTH: number = 100;
     private __stackLength: number;
 
     constructor() {
         this.__tiles = new Array(Stack.LENGTH);
-        this.__tiles.fill(null);
         this.__stackLength = this.__tiles.length;
     }
 
-    public getRandomTileFromStack(): Tile | UnsupportedException {
+    public getRandomTileFromStack(): Tile {
         if(this.getStackLength() === 0)
-            throw new UnsupportedException("Stack is Empty!");
+            throw new UnsupportedOperationException("Stack is Empty!");
 
-        let tile: StackTile = null;
-        while(!tile) {
-            let randomTilePosition = Math.floor(Math.random() * Stack.LENGTH + 1);
-            tile = this.removeTile(randomTilePosition);
-        }
-
-        return tile;
+        let randomTilePosition = Math.floor(Math.random() * this.__stackLength + 1);
+        return this.removeTileFrom(randomTilePosition);
     }
 
-    public getTiles(): StackTile[] {
+    public getTiles(): Tile[] {
         return this.__tiles;
     }
 
@@ -75,17 +67,27 @@ export default class Stack {
     //         this.__tiles.push(tile);
     // }
 
-    public removeTile(index: number): StackTile {
-        let tile: StackTile = this.__tiles.splice(index, 1, null)[0];
-        tile?this.__stackLength--:undefined;
+    public peekTileFrom(index: number): Tile {
+        if(this.getStackLength() === 0)
+            throw new UnsupportedOperationException("Stack is Empty!");
+        return this.__tiles[index];
+    }
+
+    public removeTileFrom(index: number): Tile {
+        if(this.getStackLength() === 0)
+            throw new UnsupportedOperationException("Stack is Empty!");
+        let tile: Tile = this.__tiles.splice(index, 1)[0];
+        this.evaluateStackLength();
         return tile;
     }
 
     public getStackLength(): number {
-        return this.__stackLength;
+        return this.__tiles.length;
     }
 
     public populate(): void {
+        if(this.getStackLength() === 0)
+            this.__tiles = new Array(Stack.LENGTH);
         let counter: number = 0;
         let keyCounter: number = 0;
         
@@ -106,6 +108,10 @@ export default class Stack {
                 keyCounter++;
             }
         }
+    }
+
+    public evaluateStackLength(): void {
+        this.__stackLength = this.__tiles.length;
     }
 
     public toString(): string {

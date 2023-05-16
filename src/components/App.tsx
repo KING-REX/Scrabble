@@ -6,6 +6,7 @@
  */
 
 import BoardComponentTest from "../tests/BoardComponentTest";
+import FillOrEmptyBoardSquaresTest from "../tests/FillOrEmptyBoardSquaresTest";
 import PutOrRemoveTileTest from "../tests/PutOrRemoveTileTest";
 
 function App(): JSX.Element {
@@ -15,7 +16,7 @@ function App(): JSX.Element {
   //This is not the main design !!!
 
   return (
-    <PutOrRemoveTileTest />
+    <FillOrEmptyBoardSquaresTest />
   )
 }
 

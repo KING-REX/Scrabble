@@ -1,3 +1,5 @@
+import Square from "../square/Square";
+
 type letter = "BLANK" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" 
     | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 
@@ -8,6 +10,10 @@ interface TileInterface {
     setLetter(letter: letter): void;
     getValue(): value;
     setValue(value: value): void;
+    getWidth(): number;
+    setWidth(width: number): void;
+    getHeight(): number;
+    setHeight(height: number): void;
     toJSON(): any,
     toJSONString(): string;
     toString(): string;
@@ -18,10 +24,15 @@ export default class Tile implements TileInterface {
 
     private __letter: letter;
     private __value: value;
+    private __tileWidth: number;
+    private __tileHeight: number;
 
-    constructor(__letter?: letter, __value?: value) {
+    constructor(__letter?: letter, __value?: value, __tileWidth?: number,
+        __tileHeight?: number) {
         this.__letter = __letter ?? "A";
         this.__value = __value ?? 1;
+        this.__tileWidth = __tileWidth ?? Square.getLength();
+        this.__tileHeight = __tileHeight ?? Square.getLength();
     }
 
     public getLetter(): letter {
@@ -44,6 +55,22 @@ export default class Tile implements TileInterface {
         this.__value = value;
     }
 
+    public getWidth(): number {
+        return this.__tileWidth;
+    }
+
+    public setWidth(tileWidth: number) {
+        this.__tileWidth = tileWidth;
+    }
+
+    public getHeight(): number {
+        return this.__tileHeight;
+    }
+
+    public setHeight(tileHeight: number) {
+        this.__tileHeight = tileHeight;
+    }
+
     public static fromJSON(json: any): Tile {
         let tile: Tile = new Tile();
         tile.setLetter(json.letter);
@@ -64,7 +91,9 @@ export default class Tile implements TileInterface {
         return JSON.stringify(
             {
                 letter: this.getLetter(),
-                value: this.getValue()
+                value: this.getValue(),
+                width: this.getWidth(),
+                height: this.getHeight(),
             }
         )
     }

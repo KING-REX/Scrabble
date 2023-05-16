@@ -4,18 +4,21 @@ import Board from '../objects/board/Board';
 import SquareComponent from './SquareComponent';
 import Square from '../objects/square/Square';
 
-const boardCont = new Board();
+type BoardComponentProps = {
+    board?: Board,
+    length?: number,
+}
 
-export default function BoardComponent(): JSX.Element{
+export default function BoardComponent({board, length}: BoardComponentProps): JSX.Element{
     
-    const [board, setBoard] = React.useState(boardCont);
+    const [_board, set_Board] = React.useState(board ?? new Board());
 
-    boardCont.populateBoard();
+    _board.populateBoard();
 
     return (
         <View style={styles.board}>
             {
-                boardCont.getSquares().map((row, rowIndex) => {
+                _board.getSquares().map((row, rowIndex) => {
                     return (
                         <View key={rowIndex} style={styles.row}>
                             {
@@ -25,8 +28,9 @@ export default function BoardComponent(): JSX.Element{
                                             key={cellIndex}
                                             square={cell}
                                             bgColor={'#fff'}
-                                            style={styles.cell}
+                                            // style={styles.cell}
                                             tile={null}
+                                            // length={length}
                                         ></SquareComponent>
                                     )
                                 })
