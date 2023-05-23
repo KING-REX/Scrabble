@@ -64,6 +64,10 @@ export default class Square {
         this.__coordinates.y = y;
     }
 
+    public printCoordinates(): string {
+        return JSON.stringify(this.getCoordinates());
+    }
+
     public getTile(): Tile | null {
         return this.__tile;
     }

@@ -64,7 +64,8 @@ function FillOrEmptyBoardSquaresTest(): JSX.Element {
       }
       setTilesFilled(false);
     }
-    console.log("Board[10][6] square's tile's length: " + board.getSquares()[10][6].getTile()?.toJSONString());
+    console.log("Board[10][6] square's tile: " + board.getSquares()[10][6].getTile()?.toJSONString());
+    console.log("Board[10][6] square's coordinates: " + board.getSquares()[10][6].printCoordinates());
   }
 
   return (
