@@ -1,214 +1,173 @@
-import React from 'react';
+import React, { LabelHTMLAttributes } from 'react';
 import {
     View,
     ImageBackground,
     StyleSheet,
     Text,
-    Animated
+    Animated,
+    ImageSourcePropType,
+    Platform
 } from 'react-native';
-import Tile from '../objects/tile/Tile';
-import { getTileImage } from '../objects/tile/Tiles';
+// import Tile from '../objects/tile/Tile';
 import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 import { Shadow } from 'react-native-shadow-2';
 import Draggable from 'react-native-draggable';
+import { TilesArray } from '../objects/tile/Tiles';
+
+export type letter = "BLANK" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M"
+    | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 
 type TileComponentProps = {
     style?: StyleProp<ViewStyle> | undefined,
-    tile: Tile | null,
     tileWidth: number,
     tileHeight: number,
+    tileImage: ImageSourcePropType,
     addShadow?: boolean,
     makeDraggable?: {
         x?: number,
         y?: number,
         shouldReverse?: boolean,
         shouldScale?: boolean,
-        opacity?: number,
+        opacityWhileScaling?: number,
     },
 }
 
-export default function TileComponent({ style, tile, tileWidth, tileHeight, addShadow, makeDraggable }: TileComponentProps): JSX.Element {
+type TileProps = {
+    tileLength: number,
+    letter: letter,
+    onLayout?: Function,
+}
 
-    const [shouldReverse, setShouldReverse] = React.useState(true);
+type DraggableTileProps = TileProps & {
+    x?: number,
+    y?: number,
+    shouldReverse?: boolean,
+    shouldScale?: boolean,
+    opacityWhileScaling?: number,
+    addShadow?: boolean
+}
 
-    const [isDraggable, setIsDraggable] = React.useState(false);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [isLongPressing, setIsLongPressing] = React.useState(false);
+export default function Tile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
 
-    const [hasShadow, setHasShadow] = React.useState(addShadow);
-
-    // const [_tileWidth, setTileWidth] = React.useState(tileWidth);
-
-    // const [_tileHeight, setTileHeight] = React.useState(tileHeight);
-
-    const [_tile, setTile] = React.useState(tile);
-
-    const value = React.useState(new Animated.Value(1))[0];
-    const [valueNum, setValueNum] = React.useState(1);
-
-    const [x, setX] = React.useState(makeDraggable!.x);
-    const [y, setY] = React.useState(makeDraggable!.y);
-
-    const [opacity, setOpacity] = React.useState(makeDraggable!.opacity);
-
-
-    React.useEffect(() => {
-        if (makeDraggable) {
-            setIsDraggable(true);
-            makeDraggable.x ? undefined : makeDraggable.x = 0;
-            makeDraggable.y ? undefined : makeDraggable.y = 0;
-            if (makeDraggable.shouldReverse) {
-                setShouldReverse(makeDraggable.shouldReverse);
-            }
-        }
-        else
-            setIsDraggable(false);
-    })
-
-    React.useLayoutEffect(() => {
-        setShouldReverse(makeDraggable?.shouldReverse!);
-    }, [makeDraggable?.shouldReverse])
-
-    React.useLayoutEffect(() => {
-        setTile(tile);
-    }, [tile])
-
-    React.useEffect(() => {
-        console.log("x has changed to: " + makeDraggable?.x);
-    }, [makeDraggable?.x])
-
-    React.useLayoutEffect(() => {
-        if (makeDraggable?.shouldScale && isDragging) {
-            value.setValue(2);
-            setOpacity(0.5);
-        }
-        else {
-            value.setValue(1);
-            setOpacity(1);
-        }
-    }, [isDragging])
-
-    const contents = (): any => {
-        return (
-            _tile &&
-            <ImageBackground
-                source={getTileImage(_tile)}
-                style={[style, { width: tileWidth, height: tileHeight }]}
-                resizeMode='stretch'
-            >
-                {/* <Text>{Platform.OS}</Text> */}
-            </ImageBackground>
-        )
-    }
-
-    const shadowContents = (): any => {
-        return (hasShadow ?
-            <Shadow
-
-                style={styles.tile}
-                startColor='#00000050'
-                endColor='#fff'
-                distance={5}
-                offset={[1, 1]}
-            >
-                {contents()}
-            </Shadow> :
-
-            <>
-                {contents()}
-            </>
-
-        )
-    }
-
-    const draggableContents = (): any => {
-        return (
-            isDraggable ?
-                <Draggable
-                    x={x}
-                    y={y}
-                    // x={0}
-                    // y={0}
-                    shouldReverse={shouldReverse}
-                    onDrag={(event, gestureState) => {
-                        setIsDragging(true);
-                        // let tempNum = (gestureState.dx / 10) + valueNum;
-                        // tempNum >= 2 ? tempNum = 2 : undefined;
-                        // tempNum <= 1 ? tempNum = 1 : undefined;
-                        // makeDraggable!.shouldScale ? value.setValue(tempNum) : undefined;
-                        // setValueNum(tempNum);
-
-                        // setX(gestureState.moveX);
-                        // setY(gestureState.moveY);
-                    }}
-                    onPressIn={(event) => {
-                        setIsDragging(true);
-                        // makeDraggable!.shouldScale ?
-                        //     Animated.timing(value, {
-                        //         toValue: 2,
-                        //         duration: 500,
-                        //         useNativeDriver: true
-                        //     }).start() : undefined;
-                    }}
-                    onLongPress={(event) => {
-                        // setIsDragging(false);
-                    }}
-                    onPressOut={(event) => {
-                        // if (!isDragging && isLongPressing) {
-                        //     if (makeDraggable!.shouldScale) {
-                        //         value.setValue(1);
-                        //         setOpacity(1);
-                        //     }
-                        // }
-                    }}
-                    onShortPressRelease={(event) => {
-                        setIsDragging(false);
-                    }}
-                    onDragRelease={(event, gestureState) => {
-                        setIsDragging(false);
-                        // Animated.timing(value, {
-                        //     toValue: 1,
-                        //     duration: 500,
-                        //     useNativeDriver: true
-                        // }).start()
-
-
-                        // makeDraggable!.shouldScale ? setValueNum(1) : undefined;
-                    }}
-                >
-                    <Animated.View
-                        style={{
-                            transform: [
-                                { scaleX: value },
-                                { scaleY: value },
-                                // { translateX: (width / 2) - (tileWidth / 2) },
-                                // { translateY: (height) - (tileHeight + 50) }
-                            ],
-                            width: 70,
-                            height: 70,
-                            backgroundColor: '#00bbba',
-                            opacity: opacity,
-                        }}
-                    >
-                        {shadowContents()}
-                    </Animated.View>
-                </Draggable> :
-
-                <>
-                    {shadowContents()}
-                </>
-        )
-    }
+    const [_letter, setLetter] = React.useState(letter);
+    const _value = TilesArray[letter][1];
+    const [_tileImage, setTileImage] = React.useState(TilesArray[_letter][2]);
+    const [_tileLength, setTileLength] = React.useState(tileLength);
 
     return (
-        <>
-            {draggableContents()}
-        </>
+        <ImageBackground
+            source={_tileImage}
+            style={{ width: _tileLength, height: _tileLength }}
+            resizeMode='stretch'
+            onLayout={event => onLayout ? onLayout(event.nativeEvent.layout) : {}}
+        >
+            {/* <Text>{Platform.OS}</Text> */}
+        </ImageBackground>
     )
 }
 
-const styles = StyleSheet.create({
-    tile: {
-    }
-})
+export function ShadowTile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
+    return (
+        <Shadow
+            startColor='#00000050'
+            endColor='#fff'
+            distance={5}
+            offset={[1, 1]}
+        >
+            <Tile tileLength={tileLength} letter={letter} onLayout={onLayout} />
+        </Shadow>
+    )
+}
+
+export function DraggableTile({ tileLength, letter, onLayout, x, y, shouldReverse, shouldScale, opacityWhileScaling, addShadow }: DraggableTileProps): JSX.Element {
+    const [_shouldReverse, setShouldReverse] = React.useState(shouldReverse ?? false);
+    const [_shouldScale, setShouldScale] = React.useState(shouldScale ?? false);
+    const [_opacityWhileScaling, setOpacityWhileScaling] = React.useState(opacityWhileScaling ?? 1);
+    const [hasShadow, setHasShadow] = React.useState(addShadow ?? false);
+
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [isPressed, setIsPressed] = React.useState(false);
+
+    const value = React.useState(new Animated.Value(1))[0];
+
+
+    React.useEffect(() => {
+        x ? undefined : x = 0;
+        y ? undefined : y = 0;
+    });
+
+    React.useLayoutEffect(() => {
+        if ((_shouldScale && isPressed) || (_shouldScale && isDragging)) {
+            // console.log("Tile should scale and has been pressed!")
+            value.setValue(1.5);
+            value.flattenOffset();
+            setOpacityWhileScaling(0.5);
+        }
+        if (!isPressed && !isDragging) {
+            value.setValue(1);
+            value.flattenOffset();
+            setOpacityWhileScaling(1);
+        }
+    }, [isPressed, _shouldScale, isDragging]);
+
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            console.log("IsPressed? " + isPressed);
+            console.log("IsDragging? " + isDragging);
+
+            if (isPressed && !isDragging) {
+                console.log("Is pressed and ! is dragging");
+                setIsPressed(false);
+            }
+
+            console.log();
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [isPressed, isDragging]);
+
+    return (
+        <Draggable
+            x={x}
+            y={y}
+            shouldReverse={_shouldReverse}
+            onDrag={(event, gestureState) => {
+                setIsDragging(true);
+            }}
+            onDragRelease={(event, gestureState) => {
+                setIsPressed(false);
+                setIsDragging(false);
+            }}
+            onPressIn={(event) => {
+                setIsPressed(true);
+            }}
+        >
+            {_shouldScale ?
+                <Animated.View
+                    style={{
+                        transform: [
+                            { scaleX: _shouldScale ? value : 1 },
+                            { scaleY: _shouldScale ? value : 1 },
+                            // { translateX: (width / 2) - (tileWidth / 2) },
+                            // { translateY: (height) - (tileHeight + 50) }
+                        ],
+                        width: tileLength,
+                        height: tileLength,
+                        backgroundColor: '#00bbba',
+                        opacity: _shouldScale ? _opacityWhileScaling : 1,
+                    }}
+                >
+                    {
+                        hasShadow ?
+                            <Tile tileLength={tileLength} letter={letter} /> :
+                            <ShadowTile tileLength={tileLength} letter={letter} />
+                    }
+                </Animated.View> :
+                hasShadow ?
+                    <Tile tileLength={tileLength} letter={letter} /> :
+                    <ShadowTile tileLength={tileLength} letter={letter} />
+            }
+        </Draggable>
+    )
+}

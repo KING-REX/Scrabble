@@ -15,7 +15,9 @@ import {
 import SquareComponent from '../components/SquareComponent';
 import Tiles from '../objects/tile/Tiles';
 import Tile from '../objects/tile/Tile';
-import Square from '../objects/square/Square';
+import Square from '../components/SquareComponent';
+import { ShadowTile } from '../components/TileComponent';
+// import Square, { SquareType } from '../objects/square/Square';
 
 function PutOrRemoveTileTest(): JSX.Element {
 
@@ -23,22 +25,7 @@ function PutOrRemoveTileTest(): JSX.Element {
   //The gui alternative for console.log()...
   //This is not the main design !!!
 
-  const [putOrRemoveTile, setPutOrRemoveTile] = React.useState(false);
-  // console.log(putOrRemoveTile);
-
-  const [square, setSquare] = React.useState(new Square());
-  
-  // const updateTile = () => {
-  //   console.log("Before: " + putOrRemoveTile);
-  //   setPutOrRemoveTile(!putOrRemoveTile);
-  //   console.log("After: " + putOrRemoveTile);
-  // }
-  
-  React.useLayoutEffect(()=>{
-    putOrRemoveTile ? square.putTile(Tiles.D.tile) : square.removeTile();
-    setSquare(Square.cloneSquare(square)!);
-    
-  }, [putOrRemoveTile]);
+  const [putOrRemoveTile, setPutOrRemoveTile] = React.useState(true);
 
   return (
     <View style={{
@@ -46,37 +33,36 @@ function PutOrRemoveTileTest(): JSX.Element {
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-      
-        <SquareComponent
-          length={70}
-          style={{
-            // marginLeft: 10,
-          }}
-          tile={square.getTile()}
-          square={square}
-        >
-        </SquareComponent>
-        
-        <Pressable
-            onPress={()=>setPutOrRemoveTile(!putOrRemoveTile)}
-            style={({pressed})=>({
-                backgroundColor: pressed ? '#ddd' : '#0f0',
-                ...styles.putOrRemoveTileBtn
-            })}
-        >
-            <Text style={styles.putOrRemoveTileText}>Put/Remove Tile</Text>
-        </Pressable>
+      <Square
+        length={70}
+        coordinateX={0}
+        coordinateY={0}
+        tile={
+          putOrRemoveTile ?
+            <ShadowTile letter='E' tileLength={70} /> :
+            undefined
+        }
+      />
+      <Pressable
+        onPress={() => setPutOrRemoveTile(!putOrRemoveTile)}
+        style={({ pressed }) => ({
+          backgroundColor: pressed ? '#ddd' : '#0f0',
+          ...styles.putOrRemoveTileBtn
+        })}
+      >
+        <Text style={styles.putOrRemoveTileText}>Put/Remove Tile</Text>
+      </Pressable>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   putOrRemoveTileBtn: {
-      marginTop: 20,
-      padding: 10,
-      borderWidth: 2,
-      borderColor: '#000',
-      borderRadius: 10,
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 2,
+    borderColor: '#000',
+    borderRadius: 10,
   },
   putOrRemoveTileText: {
     fontWeight: 'bold',

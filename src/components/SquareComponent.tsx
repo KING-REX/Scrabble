@@ -1,83 +1,86 @@
-import React from 'react'
-import { 
-    ColorValue, 
-    Pressable, 
-    View, 
+import React, { ReactElement } from 'react'
+import {
+    ColorValue,
+    Pressable,
+    View,
     Text,
     StyleSheet,
 } from "react-native";
-import Square, { SquareType } from "../objects/square/Square";
 import { StyleProp } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheet';
 import { ViewStyle } from '../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes';
 import InsetShadow from 'react-native-inset-shadow';
-import TileComponent from './TileComponent';
-import Tiles from '../objects/tile/Tiles';
-import Tile from '../objects/tile/Tile';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import { NativeComponentType } from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import Animated, { AnimateStyle, SharedValue, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+
+export enum SquareType {
+    NONE,
+    DOUBLE_LETTER,
+    DOUBLE_WORD,
+    TRIPLE_LETTER,
+    TRIPLE_WORD
+}
 
 type SquareComponentProps = {
     bgColor?: ColorValue,
-    length?: number,
+    length: number,
+    isOccupied: boolean,
     children?: React.ReactNode,
-    square: Square,
     style?: StyleProp<ViewStyle> | undefined,
-    tile: Tile | null
+    // tile: Tile | null,
 }
 
-export default function SquareComponent({bgColor, length, square, style, tile}: SquareComponentProps): JSX.Element {
+type SquareProps = {
+    length: number,
+    type?: SquareType,
+    coordinateX: number,
+    coordinateY: number,
+    tile?: JSX.Element,
+    style?: StyleProp<ViewStyle>,
+    bgColor?: ColorValue,
+    bgStyle?: AnimateStyle<ViewStyle>
+    spitLayout?: Function,
+}
 
-    Square.setLength(length ?? 23);
+export default function Square({ length, type, coordinateX, coordinateY, tile, style, bgColor, bgStyle,
+    spitLayout }: SquareProps): JSX.Element {
 
-    if(!tile)
-        tile=square.getTile();
-
-    const [_tile, setTile] = React.useState(tile);
-
-    React.useLayoutEffect(()=>{
-        if(tile)
-            square!.putTile(tile);
-        else
-            square.removeTile();
-        // console.log(tile)
-        setTile(tile);
-        // console.log("Updating tile...");
-    }, [tile]);
-
-    bgColor = bgColor ?? '#ddd';
-
-    // switch(_square.getType()) {
-    //     case SquareType.NONE:
-    //         return(
-                
-    //         )
-    //     default:
-    //         return <View></View>
-    // }
+    const [_length, setLength] = React.useState(length ?? 0);
+    const [_type, setType] = React.useState(type ?? SquareType.NONE);
+    const [coordinates, setCoordinates] = React.useState({
+        x: coordinateX,
+        y: coordinateY,
+    } ?? {
+        x: 0,
+        y: 0
+    });
+    const [isOccupied, setOccupied] = React.useState(tile ? true : false);
 
     return (
-        <View>
-            <InsetShadow
-                shadowColor='#000'
-                shadowOpacity={1}
-                elevation={5}
-                right={square.isOccupied() ? true : false}
-                bottom={square.isOccupied() ? true : false}
-                containerStyle={{
-                    height: Square.getLength(), 
-                    width: Square.getLength()
-                }}
+        <>
+            <Animated.View
+                style={[{
+                    height: length, width: length,
+                    backgroundColor: bgColor
+                }, bgStyle]}
+                onLayout={event => spitLayout ? spitLayout(event.nativeEvent.layout) : {}}
             >
-                <View
-                    style={[style, {
-                        backgroundColor: bgColor,
-                    }]}
+                <InsetShadow
+                    shadowColor='#000'
+                    shadowOpacity={1}
+                    elevation={5}
+                    right={isOccupied ? true : false}
+                    bottom={isOccupied ? true : false}
+                    containerStyle={{
+                    }}
                 >
-                    <TileComponent
-                        tile={_tile}
-                        tileHeight={Square.getLength()}
-                        tileWidth={Square.getLength()}
-                    />
-                </View>
-            </InsetShadow>
-        </View>
+                    <View
+                        style={[style]}
+                    >
+                        {isOccupied && tile}
+                    </View>
+                </InsetShadow>
+            </Animated.View>
+        </>
     )
 }

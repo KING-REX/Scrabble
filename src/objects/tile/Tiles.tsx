@@ -1,145 +1,65 @@
 import Tile from './Tile';
 import { ImageSourcePropType } from "react-native/types";
 
-const Tiles = {
-    BLANK: {
-        tile: new Tile("BLANK", 0),
-        image: require("../../../resources/images/tiles/BLANK.jpg"),
-    },
-
-    A: {
-        tile: new Tile('A', 1),
-        image: require("../../../resources/images/tiles/A.jpg"),
-    },
-
-    B: {
-        tile: new Tile('B', 3),
-        image: require("../../../resources/images/tiles/B.jpg"),
-    },
-
-    C: {
-        tile: new Tile('C', 3),
-        image: require("../../../resources/images/tiles/C.jpg"),
-    },
-
-    D: {
-        tile: new Tile('D', 2),
-        image: require("../../../resources/images/tiles/D.jpg"),
-    },
-
-    E: {
-        tile: new Tile('E', 1),
-        image: require("../../../resources/images/tiles/E.jpg"),
-    },
-
-    F: {
-        tile: new Tile('F', 4),
-        image: require("../../../resources/images/tiles/F.jpg"),
-    },
-
-    G: {
-        tile: new Tile('G', 2),
-        image: require("../../../resources/images/tiles/G.jpg"),
-    },
-
-    H: {
-        tile: new Tile('H', 4),
-        image: require("../../../resources/images/tiles/H.jpg"),
-    },
-
-    I: {
-        tile: new Tile('I', 1),
-        image: require("../../../resources/images/tiles/I.jpg"),
-    },
-
-    J: {
-        tile: new Tile('J', 8),
-        image: require("../../../resources/images/tiles/J.jpg"),
-    },
-
-    K: {
-        tile: new Tile('K', 5),
-        image: require("../../../resources/images/tiles/K.jpg"),
-    },
-
-    L: {
-        tile: new Tile('L', 1),
-        image: require("../../../resources/images/tiles/L.jpg"),
-    },
-
-    M: {
-        tile: new Tile('M', 3),
-        image: require("../../../resources/images/tiles/M.jpg"),
-    },
-
-    N: {
-        tile: new Tile('N', 1),
-        image: require("../../../resources/images/tiles/N.jpg"),
-    },
-
-    O: {
-        tile: new Tile('O', 1),
-        image: require("../../../resources/images/tiles/O.jpg"),
-    },
-
-    P: {
-        tile: new Tile('P', 3),
-        image: require("../../../resources/images/tiles/P.jpg"),
-    },
-
-    Q: {
-        tile: new Tile('Q', 10),
-        image: require("../../../resources/images/tiles/Q.jpg"),
-    },
-
-    R: {
-        tile: new Tile('R', 1),
-        image: require("../../../resources/images/tiles/R.jpg"),
-    },
-
-    S: {
-        tile: new Tile('S', 1),
-        image: require("../../../resources/images/tiles/S.jpg"),
-    },
-
-    T: {
-        tile: new Tile('T', 1),
-        image: require("../../../resources/images/tiles/T.jpg"),
-    },
-
-    U: {
-        tile: new Tile('U', 1),
-        image: require("../../../resources/images/tiles/U.jpg"),
-    },
-
-    V: {
-        tile: new Tile('V', 4),
-        image: require("../../../resources/images/tiles/V.jpg"),
-    },
-
-    W: {
-        tile: new Tile('W', 4),
-        image: require("../../../resources/images/tiles/W.jpg"),
-    },
-
-    X: {
-        tile: new Tile('X', 8),
-        image: require("../../../resources/images/tiles/X.jpg"),
-    },
-
-    Y: {
-        tile: new Tile('Y', 4),
-        image: require("../../../resources/images/tiles/Y.jpg"),
-    },
-
-    Z: {
-        tile: new Tile('Z', 10),
-        image: require("../../../resources/images/tiles/Z.jpg"),
-    },
+export const TilesArray = {
+    BLANK: ["BLANK", 0, require("../../../resources/images/tiles/BLANK.jpg")],
+    A: ['A', 1, require("../../../resources/images/tiles/A.jpg")],
+    B: ['B', 3, require("../../../resources/images/tiles/B.jpg")],
+    C: ['C', 3, require("../../../resources/images/tiles/C.jpg")],
+    D: ['D', 2, require("../../../resources/images/tiles/D.jpg")],
+    E: ['E', 1, require("../../../resources/images/tiles/E.jpg")],
+    F: ['F', 4, require("../../../resources/images/tiles/F.jpg")],
+    G: ['G', 2, require("../../../resources/images/tiles/G.jpg")],
+    H: ['H', 4, require("../../../resources/images/tiles/H.jpg")],
+    I: ['I', 1, require("../../../resources/images/tiles/I.jpg")],
+    J: ['J', 8, require("../../../resources/images/tiles/J.jpg")],
+    K: ['K', 5, require("../../../resources/images/tiles/K.jpg")],
+    L: ['L', 1, require("../../../resources/images/tiles/L.jpg")],
+    M: ['M', 3, require("../../../resources/images/tiles/M.jpg")],
+    N: ['N', 1, require("../../../resources/images/tiles/N.jpg")],
+    O: ['O', 1, require("../../../resources/images/tiles/O.jpg")],
+    P: ['P', 3, require("../../../resources/images/tiles/P.jpg")],
+    Q: ['Q', 10, require("../../../resources/images/tiles/Q.jpg")],
+    R: ['R', 1, require("../../../resources/images/tiles/R.jpg")],
+    S: ['S', 1, require("../../../resources/images/tiles/S.jpg")],
+    T: ['T', 1, require("../../../resources/images/tiles/T.jpg")],
+    U: ['U', 1, require("../../../resources/images/tiles/U.jpg")],
+    V: ['V', 4, require("../../../resources/images/tiles/V.jpg")],
+    W: ['W', 4, require("../../../resources/images/tiles/W.jpg")],
+    X: ['X', 8, require("../../../resources/images/tiles/X.jpg")],
+    Y: ['Y', 4, require("../../../resources/images/tiles/Y.jpg")],
+    Z: ['Z', 10, require("../../../resources/images/tiles/Z.jpg")],
 };
 
-export const getTileImage = (tile: Tile): ImageSourcePropType => {
-    return Tiles[tile.getLetter()].image;
-}
+const Tiles = {
+    BLANK: new Tile("BLANK", 0, require("../../../resources/images/tiles/BLANK.jpg")),
+    A: new Tile('A', 1, require("../../../resources/images/tiles/A.jpg")),
+    B: new Tile('B', 3, require("../../../resources/images/tiles/B.jpg")),
+    C: new Tile('C', 3, require("../../../resources/images/tiles/C.jpg")),
+    D: new Tile('D', 2, require("../../../resources/images/tiles/D.jpg")),
+    E: new Tile('E', 1, require("../../../resources/images/tiles/E.jpg")),
+    F: new Tile('F', 4, require("../../../resources/images/tiles/F.jpg")),
+    G: new Tile('G', 2, require("../../../resources/images/tiles/G.jpg")),
+    H: new Tile('H', 4, require("../../../resources/images/tiles/H.jpg")),
+    I: new Tile('I', 1, require("../../../resources/images/tiles/I.jpg")),
+    J: new Tile('J', 8, require("../../../resources/images/tiles/J.jpg")),
+    K: new Tile('K', 5, require("../../../resources/images/tiles/K.jpg")),
+    L: new Tile('L', 1, require("../../../resources/images/tiles/L.jpg")),
+    M: new Tile('M', 3, require("../../../resources/images/tiles/M.jpg")),
+    N: new Tile('N', 1, require("../../../resources/images/tiles/N.jpg")),
+    O: new Tile('O', 1, require("../../../resources/images/tiles/O.jpg")),
+    P: new Tile('P', 3, require("../../../resources/images/tiles/P.jpg")),
+    Q: new Tile('Q', 10, require("../../../resources/images/tiles/Q.jpg")),
+    R: new Tile('R', 1, require("../../../resources/images/tiles/R.jpg")),
+    S: new Tile('S', 1, require("../../../resources/images/tiles/S.jpg")),
+    T: new Tile('T', 1, require("../../../resources/images/tiles/T.jpg")),
+    U: new Tile('U', 1, require("../../../resources/images/tiles/U.jpg")),
+    V: new Tile('V', 4, require("../../../resources/images/tiles/V.jpg")),
+    W: new Tile('W', 4, require("../../../resources/images/tiles/W.jpg")),
+    X: new Tile('X', 8, require("../../../resources/images/tiles/X.jpg")),
+    Y: new Tile('Y', 4, require("../../../resources/images/tiles/Y.jpg")),
+    Z: new Tile('Z', 10, require("../../../resources/images/tiles/Z.jpg")),
+};
+
 
 export default Tiles;

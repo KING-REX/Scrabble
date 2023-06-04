@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import TileComponent from '../components/TileComponent';
 import Tiles from '../objects/tile/Tiles';
+import Tile from '../objects/tile/Tile';
 
 const ScaleDraggableTileTest = (): JSX.Element => {
 
@@ -21,21 +22,18 @@ const ScaleDraggableTileTest = (): JSX.Element => {
 
     const value = React.useState(new Animated.Value(1))[0];
 
+
+    const tile = new Tile(Tiles.B.getLetter(), Tiles.B.getValue(), Tiles.B.getTileImage(), tileWidth, tileHeight, true, {
+        x: (width / 2) - (tileWidth / 2),
+        // y: (height / 2) - (tileHeight / 2),
+        y: height - tileHeight - 50,
+        shouldReverse: true,
+        shouldScale: true
+    })
+
     return (
         <View style={styles.body}>
-            <TileComponent
-                tile={Tiles.B.tile}
-                tileHeight={tileHeight}
-                tileWidth={tileWidth}
-                addShadow
-                makeDraggable={{
-                    x: (width / 2) - (tileWidth / 2),
-                    // y: (height / 2) - (tileHeight / 2),
-                    y: height - tileHeight - 50,
-                    shouldReverse: true,
-                    shouldScale: true
-                }}
-            />
+            {tile.getTileComponent()}
         </View>
     )
 }

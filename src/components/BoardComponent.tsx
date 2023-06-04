@@ -1,35 +1,28 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Board from '../objects/board/Board';
+// import Board from '../objects/board/Board';
 import SquareComponent from './SquareComponent';
 import Square from '../objects/square/Square';
 
-type BoardComponentProps = {
-    board?: Board,
-    length?: number,
-}
+// type BoardComponentProps = {
+//     board?: Board,
+//     length?: number,
+// }
 
-export default function BoardComponent({board, length}: BoardComponentProps): JSX.Element{
-    
-    const [_board, set_Board] = React.useState(board ?? new Board());
-
+export default function Board(): JSX.Element {
+    const board: any[] = [...Array(15)].map((_, i) => i);
+    const row: any[] = [...Array(15)].map((_, i) => i);
     return (
         <View style={styles.board}>
             {
-                _board.getSquares().map((row, rowIndex) => {
+                board.map((boardRow, rowIndex) => {
                     return (
                         <View key={rowIndex} style={styles.row}>
                             {
-                                row.map((cell, cellIndex) => {
-                                    return(
-                                        <SquareComponent
-                                            key={cellIndex}
-                                            square={cell}
-                                            bgColor={'#fff'}
-                                            // style={styles.cell}
-                                            tile={null}
-                                            // length={length}
-                                        ></SquareComponent>
+                                row.map((boardCell, cellIndex) => {
+                                    return (
+                                        <SquareComponent currentIndex={cellIndex} coordinateX={rowIndex} coordinateY={cellIndex}
+                                            length={23} style={styles.cell} />
                                     )
                                 })
                             }
@@ -40,6 +33,37 @@ export default function BoardComponent({board, length}: BoardComponentProps): JS
         </View>
     )
 }
+
+// export default function BoardComponent({ board, length }: BoardComponentProps): JSX.Element {
+
+//     const [_board, set_Board] = React.useState(board ?? new Board());
+
+//     return (
+//         <View style={styles.board}>
+//             {
+//                 _board.getSquares().map((row, rowIndex) => {
+//                     return (
+//                         <View key={rowIndex} style={styles.row}>
+//                             {
+//                                 row.map((cell, cellIndex) => {
+//                                     return (
+//                                         <SquareComponent
+//                                             key={cellIndex}
+//                                             square={cell}
+//                                             bgColor={'#fff'}
+//                                         // style={styles.cell}
+//                                         // length={length}
+//                                         ></SquareComponent>
+//                                     )
+//                                 })
+//                             }
+//                         </View>
+//                     )
+//                 })
+//             }
+//         </View>
+//     )
+// }
 
 const styles = StyleSheet.create({
     board: {
@@ -57,4 +81,4 @@ const styles = StyleSheet.create({
     cell: {
         flex: 1,
     }
-})
+});

@@ -1,6 +1,11 @@
+import { StyleProp } from "react-native/Libraries/StyleSheet/StyleSheet";
+import TileComponent from "../../components/TileComponent";
 import Square from "../square/Square";
+import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
+import { ImageSourcePropType } from "react-native/types";
+import React from "react";
 
-type letter = "BLANK" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" 
+type letter = "BLANK" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M"
     | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 
 type value = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
@@ -20,19 +25,26 @@ interface TileInterface {
 }
 
 
-export default class Tile implements TileInterface {
+export default class Tile extends React.Component implements TileInterface {
 
     private __letter: letter;
     private __value: value;
     private __tileWidth: number;
     private __tileHeight: number;
+    private __tileComponent: JSX.Element;
+    private __tileImage: ImageSourcePropType;
 
-    constructor(__letter?: letter, __value?: value, __tileWidth?: number,
-        __tileHeight?: number) {
+    constructor(__letter?: letter, __value?: value, __tileImage?: ImageSourcePropType,
+        __tileWidth?: number, __tileHeight?: number, addShadow?: boolean, makeDraggable?: {
+            x?: number, y?: number, shouldReverse?: boolean, shouldScale?: boolean, opacityWhileScaling?: number,
+        }) {
+        super({});
         this.__letter = __letter ?? "A";
         this.__value = __value ?? 1;
+        this.__tileImage = __tileImage ?? require("../../../resources/images/tiles/A.jpg");
         this.__tileWidth = __tileWidth ?? Square.getLength();
         this.__tileHeight = __tileHeight ?? Square.getLength();
+        this.__tileComponent = this.updateTileComponent(addShadow ?? false, makeDraggable);
     }
 
     public getLetter(): letter {
@@ -71,8 +83,25 @@ export default class Tile implements TileInterface {
         this.__tileHeight = tileHeight;
     }
 
+    public getTileImage(): ImageSourcePropType {
+        return this.__tileImage;
+    }
+
+    public setTileImage(tileImage: ImageSourcePropType): void {
+        this.__tileImage = tileImage;
+    }
+
+    public getTileComponent(addShadow?: boolean): JSX.Element {
+        this.updateTileComponent(addShadow ?? false);
+        return this.__tileComponent;
+    }
+
+    public setTileComponent(tileComponent: JSX.Element): void {
+        this.__tileComponent = tileComponent;
+    }
+
     public static cloneTile(tile?: Tile | null): Tile | null {
-        if(!tile)
+        if (!tile)
             return null;
         const tempTile = new Tile();
         tempTile.__letter = tile.__letter;
@@ -121,5 +150,23 @@ export default class Tile implements TileInterface {
 
     public static createTile(letter: letter, value: value): Tile {
         return new Tile(letter, value);
+    }
+
+    public updateTileComponent(addShadow: boolean, makeDraggable?: {
+        x?: number, y?: number, shouldReverse?: boolean, shouldScale?: boolean, opacityWhileScaling?: number,
+    }, style?: StyleProp<ViewStyle> | undefined): JSX.Element {
+
+        this.__tileComponent = (
+            <TileComponent
+                tileHeight={this.getHeight()}
+                tileWidth={this.getWidth()}
+                tileImage={this.getTileImage()}
+                addShadow={addShadow}
+                makeDraggable={makeDraggable}
+                style={style}
+            />
+        )
+
+        return this.__tileComponent;
     }
 }
