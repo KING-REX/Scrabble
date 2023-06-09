@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { ColorValue } from "react-native";
 import Square from "./SquareComponent";
+import Tile, { letter } from "./TileComponent";
 // import Board from '../objects/board/Board';
 // import SquareComponent from "./SquareComponent";
 // import Square from "../objects/square/Square";
@@ -21,8 +22,11 @@ import Square from "./SquareComponent";
 
 type BoardProps = {
 	size?: number;
-	isTileDragging?: boolean;
-	isTD?: SharedValue<boolean>;
+	isTileDragging?: SharedValue<boolean>;
+	tileDimensions?: SharedValue<
+		{ x: number; y: number; width: number; height: number } | undefined
+	>;
+	droppedTile?: SharedValue<{ letter: letter; tileLength: number } | undefined>;
 	animated?: AnimateStyle<ViewStyle>;
 	// animatedProps?: Partial<{
 	// 	tileIsDragging: boolean;
@@ -34,8 +38,14 @@ const colHeight = rowHeight;
 const rowGap = 4;
 const colGap = rowGap;
 
-export default function Board({ size, isTD, isTileDragging, animated }: BoardProps): JSX.Element {
-	const newITD = useSharedValue(false);
+export default function Board({
+	size,
+	tileDimensions,
+	isTileDragging,
+	droppedTile,
+	animated,
+}: BoardProps): JSX.Element {
+	// const newITD = useSharedValue(false);
 
 	// const itdValue = newITD.value ? "#000" : "#AAA";
 
@@ -47,31 +57,74 @@ export default function Board({ size, isTD, isTileDragging, animated }: BoardPro
 	// 	return newITD.value ? "#000" : "#AAA";
 	// });
 
-	const backgroundColor = useSharedValue("#FFF");
+	const tileSV = useSharedValue(
+		droppedTile && droppedTile.value && (
+			<Tile tileLength={droppedTile.value.tileLength} letter={droppedTile.value.letter} />
+		)
+	);
 
-	let boardOffsetX: number = 0;
-	let boardOffsetY: number = 0;
-	let boardHeight: number = 0;
-	let boardWidth: number = 0;
+	const [boardOffsetX, setBoardOffsetX] = React.useState(0);
+	const [boardOffsetY, setBoardOffsetY] = React.useState(0);
+	const [boardHeight, setBoardHeight] = React.useState(0);
+	const [boardWidth, setBoardWidth] = React.useState(0);
 
-	let currentRowOffsetX: number = 0;
-	let currentRowOffsetY: number = 0;
+	const [droppedTileState, setDroppedTileState] = React.useState<JSX.Element | undefined>(
+		undefined
+	);
+
+	const boardOffset = (boardLayout: LayoutRectangle) => {
+		setBoardOffsetX(boardLayout.x);
+		setBoardOffsetY(boardLayout.y);
+		setBoardHeight(boardLayout.height);
+		setBoardWidth(boardLayout.width);
+	};
+
+	console.log("Board offset outside the function: " + boardOffsetX);
+
+	const rowIndex = useSharedValue(-1);
+	const colIndex = useSharedValue(-1);
 
 	let tileOffsetX: number = 0;
 	let tileOffsetY: number = 0;
 	let tileAbsoluteX: number = 0;
 	let tileAbsoluteY: number = 0;
 
-	const rowIndex = useSharedValue(-1);
-	const colIndex = useSharedValue(-1);
+	const BOARD_SIZE: number = size ?? 5;
 
-	const boardOffset = (boardLayout: LayoutRectangle) => {
-		boardOffsetX = boardLayout.x;
-		boardOffsetY = boardLayout.y;
-		console.log("Board offset:", boardOffsetX, boardOffsetY);
-		boardWidth = boardLayout.height;
-		boardWidth = boardLayout.width;
-	};
+	useDerivedValue(() => {
+		if (isTileDragging && tileDimensions && tileDimensions.value) {
+			// console.log("Tile Dimensions changed to:", JSON.stringify(tileDimensions.value));
+			// console.log("BoardOffsetX: " + boardOffsetX);
+			tileAbsoluteX = tileDimensions.value.x;
+			tileAbsoluteY = tileDimensions.value.y;
+			// console.log("TileAbsoluteX:", tileAbsoluteX);
+			let roundedX: number = Math.round(
+				(tileAbsoluteX - boardOffsetX) / (colHeight + colGap)
+			);
+			let roundedY: number = Math.round(
+				(tileAbsoluteY - boardOffsetY) / (rowHeight + rowGap)
+			);
+
+			rowIndex.value = roundedY === -0 ? 0 : roundedY < BOARD_SIZE ? roundedY : -1;
+			colIndex.value = roundedX === -0 ? 0 : roundedX < BOARD_SIZE ? roundedX : -1;
+
+			// console.log("RoundedX:", roundedX);
+			// console.log("RoundedY:", roundedY);
+
+			console.log("Col Index:", colIndex.value);
+			console.log("Row Index:", rowIndex.value);
+			console.log();
+		} else {
+			console.log(
+				"Dropped tile noticed in BoardComponent:",
+				droppedTile?.value?.letter,
+				droppedTile?.value?.tileLength
+			);
+		}
+	});
+
+	let currentRowOffsetX: number = 0;
+	let currentRowOffsetY: number = 0;
 
 	const currentRowOffset = (rowLayout: LayoutRectangle) => {
 		currentRowOffsetX = rowLayout.x;
@@ -90,7 +143,21 @@ export default function Board({ size, isTD, isTileDragging, animated }: BoardPro
 
 	const yToRowIndex = (y: number) => {};
 
-	const BOARD_SIZE: number = size ?? 5;
+	// const checkForDroppedTile = (i: number, j: number) =>
+	// 	useDerivedValue(() => {
+	// 		if (droppedTile && droppedTile.value) {
+	// 			if (rowIndex.value === i && colIndex.value === j) {
+	// 				console.log("Dropped on square " + i, j);
+	// 				return (
+	// 					<Tile
+	// 						letter={droppedTile.value.letter}
+	// 						tileLength={droppedTile.value.tileLength}
+	// 					/>
+	// 				);
+	// 			}
+	// 		}
+	// 		return undefined;
+	// 	});
 
 	const rows = [...Array(BOARD_SIZE)].map((_, i) => i);
 	const cells = [...Array(BOARD_SIZE)].map((_, i) => i);
@@ -109,19 +176,29 @@ export default function Board({ size, isTD, isTileDragging, animated }: BoardPro
 			else return { backgroundColor: "#FFF" };
 		}, [rowIndex.value]);
 
+	const getDroppedTile = (i: number, j: number) =>
+		useDerivedValue(() => {
+			if (rowIndex.value === i && colIndex.value === j && droppedTile && droppedTile.value)
+				return droppedTile.value;
+			else return undefined;
+		});
+
 	return (
 		<Animated.View
 			style={[
 				styles.board,
 				{
 					// backgroundColor: useDerivedValue(() => {
-					// 	return isTD?.value ? "#000" : "#AAA";
+					// 	return isTileDragging?.value ? "#000" : "#AAA";
 					// }).value,
 				},
 
 				// animated,
 			]}
-			onLayout={(event) => boardOffset(event.nativeEvent.layout)}>
+			onLayout={(event) => {
+				boardOffset(event.nativeEvent.layout);
+				console.log("Board offset after calling the function:", boardOffsetX, boardOffsetY);
+			}}>
 			{rows.map((_, i) => {
 				return (
 					<Animated.View
@@ -138,6 +215,17 @@ export default function Board({ size, isTD, isTileDragging, animated }: BoardPro
 									length={rowHeight}
 									style={styles.cell}
 									bgStyle={squareBgStyle(i, j)}
+									// tile={
+									// 	droppedTile &&
+									// 	droppedTile.value && (
+									// 		<Tile
+									// 			letter={droppedTile.value.letter}
+									// 			tileLength={droppedTile.value.tileLength}
+									// 		/>
+									// 	)
+									// }
+									// tile2={tileSV}
+									tile3={getDroppedTile(i, j)}
 								/>
 							);
 						})}

@@ -16,6 +16,7 @@ import ScaleDraggableTileTest from "../tests/ScaleDraggableTileComponentTest";
 import SquareTest from "../tests/SquareTest";
 import ChessboardExample from "./DraggableTile";
 import Test2 from "./Test2";
+import React from "react";
 
 function App(): JSX.Element {
 	//This is just to test to see whether things are working out fine!

@@ -39,9 +39,6 @@ const DragAndDropTile = ({
 		height: 0,
 	};
 
-	React.useEffect(() => {
-		console.log("Rendering DADTile");
-	});
 	let type: TileType = tileType ?? "normal";
 
 	let boardOffsetX: number = 0;
@@ -57,7 +54,7 @@ const DragAndDropTile = ({
 
 	const BOARD_SIZE: number = 5;
 
-	const tileOffset = (tileLayout: LayoutRectangle) => {
+	const initialTileOffset = (tileLayout: LayoutRectangle) => {
 		tileDimensions.height = tileLayout.height;
 		tileDimensions.width = tileLayout.width;
 		tileDimensions.x0 = tileLayout.x;
@@ -65,6 +62,12 @@ const DragAndDropTile = ({
 
 		console.log(JSON.stringify(tileDimensions));
 	};
+
+	const changedTileOffset = (tAbsoluteX: number, tAbsoluteY: number) => {
+		tileDimensions.x0 = tAbsoluteX;
+		tileDimensions.y0 = tAbsoluteY;
+	};
+
 	return (
 		<DragAndDrop
 			onDragStart={(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
@@ -101,7 +104,10 @@ const DragAndDropTile = ({
 				// console.log("Round:", round);
 				// console.log("Col Index:", colIndex.value);
 				// console.log("Row Index:", rowIndex.value);
-				tileDragging ? tileDragging(event) : {};
+
+				changedTileOffset(tileAbsoluteX, tileAbsoluteY);
+
+				tileDragging ? tileDragging(event, tileDimensions) : {};
 			}}
 			onDrop={(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
 				console.log("Dropped at:", event.absoluteX, event.absoluteY);
@@ -116,9 +122,9 @@ const DragAndDropTile = ({
 			}}
 			style={{ margin: 30, backgroundColor: "#f00" }}>
 			{type === "normal" ? (
-				<Tile letter={letter} tileLength={tileLength} onLayout={tileOffset} />
+				<Tile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
 			) : (
-				<ShadowTile letter={letter} tileLength={tileLength} onLayout={tileOffset} />
+				<ShadowTile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
 			)}
 		</DragAndDrop>
 	);
