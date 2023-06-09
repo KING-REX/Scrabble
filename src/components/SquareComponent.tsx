@@ -75,7 +75,7 @@ export default function Square({
 
 	useDerivedValue(() => {
 		if (tile3 && tile3.value) {
-			console.log("Tile3: " + JSON.stringify(tile3.value));
+			// console.log("Tile3: " + JSON.stringify(tile3.value));
 			runOnJS(setTileSV)(tile3.value);
 		} else {
 			runOnJS(setTileSV)(undefined);

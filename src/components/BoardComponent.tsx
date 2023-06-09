@@ -79,8 +79,6 @@ export default function Board({
 		setBoardWidth(boardLayout.width);
 	};
 
-	console.log("Board offset outside the function: " + boardOffsetX);
-
 	const rowIndex = useSharedValue(-1);
 	const colIndex = useSharedValue(-1);
 
@@ -111,15 +109,15 @@ export default function Board({
 			// console.log("RoundedX:", roundedX);
 			// console.log("RoundedY:", roundedY);
 
-			console.log("Col Index:", colIndex.value);
-			console.log("Row Index:", rowIndex.value);
-			console.log();
+			// console.log("Col Index:", colIndex.value);
+			// console.log("Row Index:", rowIndex.value);
+			// console.log();
 		} else {
-			console.log(
-				"Dropped tile noticed in BoardComponent:",
-				droppedTile?.value?.letter,
-				droppedTile?.value?.tileLength
-			);
+			// console.log(
+			// 	"Dropped tile noticed in BoardComponent:",
+			// 	droppedTile?.value?.letter,
+			// 	droppedTile?.value?.tileLength
+			// );
 		}
 	});
 
