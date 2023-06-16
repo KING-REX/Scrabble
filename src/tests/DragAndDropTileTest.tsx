@@ -29,8 +29,10 @@ const rowGap = 4;
 const colGap = rowGap;
 
 const DragAndDropTileTest = (): JSX.Element => {
-	const letter: letter = "H";
-	const tileLength = 50;
+	const [hasDropped, setHasDropped] = React.useState(false);
+	const [hasPicked, setHasPicked] = React.useState(false);
+	const letter: SharedValue<letter> = useSharedValue("H");
+	const tileLength: SharedValue<number> = useSharedValue(50);
 
 	const tileIsDragging: SharedValue<boolean> = useSharedValue(false);
 	const tileDimensions: SharedValue<
@@ -44,15 +46,14 @@ const DragAndDropTileTest = (): JSX.Element => {
 	const tileDropped: SharedValue<{ letter: letter; tileLength: number } | undefined> =
 		useSharedValue(undefined);
 
-	const animatedTileIsDragging = useAnimatedStyle(() => {
-		if (tileIsDragging.value)
-			return {
-				backgroundColor: "#000",
-			};
-		else
-			return {
-				backgroundColor: "#AAA",
-			};
+	const tilePicked: SharedValue<{ letter: letter; tileLength: number } | undefined> =
+		useSharedValue(undefined);
+
+	useDerivedValue(() => {
+		if (tilePicked && tilePicked.value) {
+			letter.value = tilePicked.value.letter;
+			tileLength.value = tilePicked.value.tileLength;
+		}
 	});
 
 	return (
@@ -61,41 +62,47 @@ const DragAndDropTileTest = (): JSX.Element => {
 				isTileDragging={tileIsDragging}
 				tileDimensions={tileDimensions}
 				droppedTile={tileDropped}
-				animated={animatedTileIsDragging}
 			/>
 
-			<DragAndDropTile
-				letter={letter}
-				tileLength={tileLength}
-				tileType="shadow"
-				tileDragStarted={(
-					event: GestureStateChangeEvent<PanGestureHandlerEventPayload>
-				) => {
-					tileIsDragging.value = true;
-					tileDropped.value = undefined;
-				}}
-				tileDragging={(
-					event: GestureUpdateEvent<
-						PanGestureHandlerEventPayload & PanGestureChangeEventPayload
-					>,
-					tileDim: { x0: number; y0: number; width: number; height: number }
-				) => {
-					tileDimensions.value = {
-						x: tileDim.x0,
-						y: tileDim.y0,
-						width: tileDim.width,
-						height: tileDim.height,
-					};
-				}}
-				tileDragEnded={(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
-					tileIsDragging.value = false;
-					tileDimensions.value = undefined;
-					tileDropped.value = {
-						letter: letter,
-						tileLength: tileLength,
-					};
-				}}
-			/>
+			{(!hasDropped || hasPicked) && (
+				<DragAndDropTile
+					letter={letter.value}
+					tileLength={tileLength.value}
+					tileType="shadow"
+					tileDragStarted={(
+						event: GestureStateChangeEvent<PanGestureHandlerEventPayload>
+					) => {
+						tileIsDragging.value = true;
+						tileDropped.value = undefined;
+						setHasDropped(false);
+					}}
+					tileDragging={(
+						event: GestureUpdateEvent<
+							PanGestureHandlerEventPayload & PanGestureChangeEventPayload
+						>,
+						tileDim: { x0: number; y0: number; width: number; height: number }
+					) => {
+						tileDimensions.value = {
+							x: tileDim.x0,
+							y: tileDim.y0,
+							width: tileDim.width,
+							height: tileDim.height,
+						};
+					}}
+					tileDragEnded={(
+						event: GestureStateChangeEvent<PanGestureHandlerEventPayload>
+					) => {
+						tileIsDragging.value = false;
+						tileDimensions.value = undefined;
+						tileDropped.value = {
+							letter: letter.value,
+							tileLength: tileLength.value,
+						};
+						setHasDropped(true);
+					}}
+					style={{ position: "absolute", bottom: 100 }}
+				/>
+			)}
 		</View>
 	);
 };

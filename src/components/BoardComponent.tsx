@@ -8,7 +8,6 @@ import Animated, {
 	useDerivedValue,
 	SharedValue,
 } from "react-native-reanimated";
-import { ColorValue } from "react-native";
 import Square from "./SquareComponent";
 import Tile, { letter } from "./TileComponent";
 // import Board from '../objects/board/Board';
@@ -27,10 +26,7 @@ type BoardProps = {
 		{ x: number; y: number; width: number; height: number } | undefined
 	>;
 	droppedTile?: SharedValue<{ letter: letter; tileLength: number } | undefined>;
-	animated?: AnimateStyle<ViewStyle>;
-	// animatedProps?: Partial<{
-	// 	tileIsDragging: boolean;
-	// }>;
+	style?: AnimateStyle<ViewStyle>;
 };
 
 const rowHeight = 50;
@@ -43,20 +39,8 @@ export default function Board({
 	tileDimensions,
 	isTileDragging,
 	droppedTile,
-	animated,
+	style,
 }: BoardProps): JSX.Element {
-	// const newITD = useSharedValue(false);
-
-	// const itdValue = newITD.value ? "#000" : "#AAA";
-
-	// const itdValue = useDerivedValue(() => {
-	// 	if (!isTD) console.log("There is no isTD");
-	// 	newITD.value = isTD ? (isTD.value ? isTD.value : false) : false;
-	// 	console.log("NewITD has changed !!!", newITD.value);
-
-	// 	return newITD.value ? "#000" : "#AAA";
-	// });
-
 	const tileSV = useSharedValue(
 		droppedTile && droppedTile.value && (
 			<Tile tileLength={droppedTile.value.tileLength} letter={droppedTile.value.letter} />
@@ -67,10 +51,6 @@ export default function Board({
 	const [boardOffsetY, setBoardOffsetY] = React.useState(0);
 	const [boardHeight, setBoardHeight] = React.useState(0);
 	const [boardWidth, setBoardWidth] = React.useState(0);
-
-	const [droppedTileState, setDroppedTileState] = React.useState<JSX.Element | undefined>(
-		undefined
-	);
 
 	const boardOffset = (boardLayout: LayoutRectangle) => {
 		setBoardOffsetX(boardLayout.x);
@@ -185,6 +165,7 @@ export default function Board({
 		<Animated.View
 			style={[
 				styles.board,
+				style,
 				{
 					// backgroundColor: useDerivedValue(() => {
 					// 	return isTileDragging?.value ? "#000" : "#AAA";
@@ -195,7 +176,6 @@ export default function Board({
 			]}
 			onLayout={(event) => {
 				boardOffset(event.nativeEvent.layout);
-				console.log("Board offset after calling the function:", boardOffsetX, boardOffsetY);
 			}}>
 			{rows.map((_, i) => {
 				return (
@@ -223,7 +203,7 @@ export default function Board({
 									// 	)
 									// }
 									// tile2={tileSV}
-									tile3={getDroppedTile(i, j)}
+									tileSharedValue={getDroppedTile(i, j)}
 								/>
 							);
 						})}
@@ -304,7 +284,7 @@ const styles = StyleSheet.create({
 		gap: 1,
 	},
 	cell: {
-		flex: 1,
+		// flex: 1,
 		// zIndex: 10,
 	},
 });

@@ -1,14 +1,21 @@
-import { View, Text, LayoutRectangle } from "react-native";
-import React from "react";
+import { View, Text, LayoutRectangle, ViewStyle } from "react-native";
+import React, { useEffect } from "react";
 import {
 	GestureStateChangeEvent,
 	PanGestureHandlerEventPayload,
 	GestureUpdateEvent,
 	PanGestureChangeEventPayload,
+	LongPressGestureHandlerEventPayload,
 } from "react-native-gesture-handler";
 import DragAndDrop from "../../utils/DragAndDrop";
-import Tile, { ShadowTile, TileProps } from "../components/TileComponent";
-import { useSharedValue } from "react-native-reanimated";
+import Tile, {
+	InsetShadowTile,
+	NeoShadowTile,
+	ShadowTile,
+	TileProps,
+	letter,
+} from "../components/TileComponent";
+import { SharedValue, useSharedValue } from "react-native-reanimated";
 
 type TileType = "normal" | "shadow";
 
@@ -17,6 +24,15 @@ type DragAndDropTileProps = {
 	tileDragStarted?: Function;
 	tileDragging?: Function;
 	tileDragEnded?: Function;
+	tileLongPressStarted?: Function;
+	tileLongPressEnded?: Function;
+	style?: ViewStyle;
+	enableDrag?: boolean;
+};
+
+type DragAndDropTileWithSVProps = {
+	letterSV: SharedValue<letter>;
+	tileLengthSV: SharedValue<number>;
 };
 
 const rowHeight = 50;
@@ -31,7 +47,14 @@ const DragAndDropTile = ({
 	tileDragStarted,
 	tileDragging,
 	tileDragEnded,
+	tileLongPressStarted,
+	tileLongPressEnded,
+	style,
+	enableDrag,
 }: DragAndDropTileProps & TileProps): JSX.Element => {
+	console.log("Prop enable drag is: " + enableDrag);
+	// const [_enableDrag, setEnableDrag] = React.useState(enableDrag ?? true);
+	// console.log("State enable drag is: " + _enableDrag);
 	const tileDimensions = {
 		x0: 0,
 		y0: 0,
@@ -68,8 +91,29 @@ const DragAndDropTile = ({
 		tileDimensions.y0 = tAbsoluteY;
 	};
 
+	const contents = (): JSX.Element => {
+		return type === "normal" ? (
+			<Tile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
+		) : (
+			<NeoShadowTile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
+		);
+	};
+
+	// React.useEffect(() => {
+	// 	console.log("Enable drag has changed to: " + _enableDrag);
+	// }, [_enableDrag]);
+
+	/* 
+					SO BASICALLY, THERE IS A PROBLEM WITH THE TILE DRAGGING. IF THE USER "THROWS" THE TILE, THE EVENT'S ABSOLUTE X AND Y CHANGES DRASTICALLY,
+					AND THIS SHOULD BE THE REASON WHY THE CALCULATION FROM THE OFFSET GETS THROWN OFF...
+
+					SO THE SOLUTION WILL BE TO REVERSE THE TILE TO IT'S INITIAL POSITION WHEN THE velocityX AND/OR the velocityY OF THE EVENT PASSES A CERTAIN 
+					THRESHOLD. FIGURE OUT THAT THRESHOLD BY YOURSELF (RESEARCHING WILL BE A GOOD IDEA!)
+				*/
+
 	return (
 		<DragAndDrop
+			enableDrag={enableDrag}
 			onDragStart={(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
 				tileOffsetY = event.absoluteY - tileAbsoluteY;
 				tileOffsetX = event.absoluteX - tileAbsoluteX;
@@ -87,6 +131,7 @@ const DragAndDropTile = ({
 					PanGestureHandlerEventPayload & PanGestureChangeEventPayload
 				>
 			) => {
+				console.log("Velocity[X&Y]:", event.velocityX, event.velocityY);
 				// console.log(yToRowIndex(event.absoluteY))
 
 				// console.log("Tile Absolute Y:", tileAbsoluteY);
@@ -114,20 +159,41 @@ const DragAndDropTile = ({
 				console.log("Tile absolute coord:", tileAbsoluteX, tileAbsoluteY);
 				tileDragEnded ? tileDragEnded() : {};
 			}}
+			onLongPressStarted={(
+				event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>
+			) => {
+				console.log("Tile lp started!");
+				tileLongPressStarted ? tileLongPressStarted() : {};
+			}}
+			onLongPressEnded={(
+				event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>
+			) => {
+				console.log("Tile lp ended!");
+				tileLongPressEnded ? tileLongPressEnded() : {};
+			}}
 			onLayout={(event) => {
 				tileAbsoluteX = event.nativeEvent.layout.x;
 				console.log("TAX:", tileAbsoluteX);
 				tileAbsoluteY = event.nativeEvent.layout.y;
 				console.log("TAY:", tileAbsoluteY);
 			}}
-			style={{ margin: 30, backgroundColor: "#f00" }}>
-			{type === "normal" ? (
-				<Tile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
-			) : (
-				<ShadowTile letter={letter} tileLength={tileLength} onLayout={initialTileOffset} />
-			)}
+			style={[style, { zIndex: 50 }]}>
+			{contents()}
 		</DragAndDrop>
 	);
 };
+
+export const DragAndDropTileWithSV = ({
+	letterSV,
+	tileLengthSV,
+	tileType,
+	tileDragStarted,
+	tileDragging,
+	tileDragEnded,
+	tileLongPressStarted,
+	tileLongPressEnded,
+	style,
+	enableDrag,
+}: DragAndDropTileWithSVProps & DragAndDropTileProps) => {};
 
 export default DragAndDropTile;

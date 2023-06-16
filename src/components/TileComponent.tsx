@@ -11,7 +11,9 @@ import {
 // import Tile from '../objects/tile/Tile';
 import { StyleProp } from "../../node_modules/react-native/Libraries/StyleSheet/StyleSheet";
 import { ViewStyle } from "../../node_modules/react-native/Libraries/StyleSheet/StyleSheetTypes";
+import InsetShadow from "react-native-inset-shadow";
 import { Shadow } from "react-native-shadow-2";
+import * as NeomorphShadow from "react-native-neomorph-shadows";
 import Draggable from "react-native-draggable";
 import { TilesArray } from "../objects/tile/Tiles";
 
@@ -74,11 +76,7 @@ type DraggableTileProps = TileProps & {
 	addShadow?: boolean;
 };
 
-export default function Tile({
-	tileLength,
-	letter,
-	onLayout,
-}: TileProps): JSX.Element {
+export default function Tile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
 	const [_letter, setLetter] = React.useState(letter);
 	const _value = TilesArray[letter][1];
 	const [_tileImage, setTileImage] = React.useState(TilesArray[_letter][2]);
@@ -87,31 +85,62 @@ export default function Tile({
 	return (
 		<ImageBackground
 			source={_tileImage}
-			style={{ width: _tileLength, height: _tileLength }}
+			style={{ width: _tileLength, height: _tileLength, overflow: "visible" }}
 			resizeMode="stretch"
-			onLayout={(event) =>
-				onLayout ? onLayout(event.nativeEvent.layout) : {}
-			}
-		>
+			onLayout={(event) => (onLayout ? onLayout(event.nativeEvent.layout) : {})}>
 			{/* <Text>{Platform.OS}</Text> */}
 		</ImageBackground>
 	);
 }
 
-export function ShadowTile({
-	tileLength,
-	letter,
-	onLayout,
-}: TileProps): JSX.Element {
+export function ShadowTile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
 	return (
-		<Shadow
-			startColor="#00000050"
-			endColor="#fff"
-			distance={5}
-			offset={[1, 1]}
-		>
+		<Shadow startColor="#000000ff" endColor="#00000000" distance={2} offset={[1, 1]}>
 			<Tile tileLength={tileLength} letter={letter} onLayout={onLayout} />
 		</Shadow>
+	);
+}
+
+export function InsetShadowTile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
+	return (
+		<InsetShadow shadowColor="#000" shadowOpacity={1} elevation={5} containerStyle={{}}>
+			<Tile tileLength={tileLength} letter={letter} onLayout={onLayout} />
+		</InsetShadow>
+		// <Shadow startColor="#000000ff" endColor="#00000000" distance={2} offset={[1, 1]}>
+		// </Shadow>
+	);
+}
+
+export function NeoShadowTile({ tileLength, letter, onLayout }: TileProps): JSX.Element {
+	const [_letter, setLetter] = React.useState(letter);
+	const _value = TilesArray[letter][1];
+	const [_tileImage, setTileImage] = React.useState(TilesArray[_letter][2]);
+	const [_tileLength, setTileLength] = React.useState(tileLength);
+
+	return (
+		<ImageBackground
+			source={_tileImage}
+			style={{
+				width: _tileLength,
+				height: _tileLength,
+				zIndex: 100,
+			}}
+			resizeMode="stretch"
+			onLayout={(event) => (onLayout ? onLayout(event.nativeEvent.layout) : {})}>
+			<NeomorphShadow.Shadow
+				inner
+				useArt
+				style={{
+					width: _tileLength,
+					height: _tileLength,
+					shadowColor: "#000",
+					shadowOpacity: 1,
+					shadowRadius: 6,
+					zIndex: 150,
+				}}>
+				{/* <Text>{Platform.OS}</Text> */}
+			</NeomorphShadow.Shadow>
+		</ImageBackground>
 	);
 }
 
