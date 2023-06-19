@@ -30,8 +30,8 @@ function PutOrRemoveTileTest(): JSX.Element {
 			}}>
 			<Square
 				length={70}
-				coordinateX={0}
-				coordinateY={0}
+				rowIndex={0}
+				colIndex={0}
 				tileSharedValue={
 					putOrRemoveTile ? <ShadowTile letter="E" tileLength={70} /> : undefined
 				}

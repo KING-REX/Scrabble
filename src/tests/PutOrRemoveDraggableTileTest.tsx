@@ -37,8 +37,8 @@ function PutOrRemoveDraggableTileTest(): JSX.Element {
 			{lockOrUnlockTile ? (
 				<Square
 					length={72}
-					coordinateX={0}
-					coordinateY={0}
+					rowIndex={0}
+					colIndex={0}
 					tileSharedValue={
 						// lockOrUnlockTile ?
 						//     <DraggableTile letter='E' tileLength={70} shouldReverse={true} x={0} y={0} /> :

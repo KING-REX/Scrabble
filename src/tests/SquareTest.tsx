@@ -10,8 +10,8 @@ const SquareTest = () => {
 		<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 			<Square
 				length={75}
-				coordinateX={0}
-				coordinateY={0}
+				rowIndex={0}
+				colIndex={0}
 				tileSharedValue={<ShadowTile letter="E" tileLength={70} />}
 			/>
 		</View>

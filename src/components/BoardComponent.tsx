@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Square from "./SquareComponent";
 import Tile, { letter } from "./TileComponent";
+import DragAndDropTile from "../tests/DragAndDropTile";
 // import Board from '../objects/board/Board';
 // import SquareComponent from "./SquareComponent";
 // import Square from "../objects/square/Square";
@@ -25,7 +26,10 @@ type BoardProps = {
 	tileDimensions?: SharedValue<
 		{ x: number; y: number; width: number; height: number } | undefined
 	>;
-	droppedTile?: SharedValue<{ letter: letter; tileLength: number } | undefined>;
+	droppedTile?: SharedValue<
+		{ letter: letter; tileLength: number; tileX: number; tileY: number } | undefined
+	>;
+	pickTileFunc?: Function;
 	style?: AnimateStyle<ViewStyle>;
 };
 
@@ -39,6 +43,7 @@ export default function Board({
 	tileDimensions,
 	isTileDragging,
 	droppedTile,
+	pickTileFunc,
 	style,
 }: BoardProps): JSX.Element {
 	const tileSV = useSharedValue(
@@ -47,16 +52,17 @@ export default function Board({
 		)
 	);
 
-	const [boardOffsetX, setBoardOffsetX] = React.useState(0);
-	const [boardOffsetY, setBoardOffsetY] = React.useState(0);
-	const [boardHeight, setBoardHeight] = React.useState(0);
-	const [boardWidth, setBoardWidth] = React.useState(0);
+	const [boardOffsetX, setBoardOffsetX] = React.useState(-1);
+	const [boardOffsetY, setBoardOffsetY] = React.useState(-1);
+	const [boardHeight, setBoardHeight] = React.useState(-1);
+	const [boardWidth, setBoardWidth] = React.useState(-1);
 
 	const boardOffset = (boardLayout: LayoutRectangle) => {
 		setBoardOffsetX(boardLayout.x);
 		setBoardOffsetY(boardLayout.y);
 		setBoardHeight(boardLayout.height);
 		setBoardWidth(boardLayout.width);
+		console.log("Board offset X&Y:", boardLayout.x, boardLayout.y);
 	};
 
 	const rowIndex = useSharedValue(-1);
@@ -161,6 +167,29 @@ export default function Board({
 			else return undefined;
 		});
 
+	const pickTile = (tile: {
+		letter: letter;
+		tileLength: number;
+		tileX: number;
+		tileY: number;
+	}) => {
+		console.log(
+			"Tile details:",
+			JSON.stringify({
+				...tile,
+				tileX: tile.tileX + boardOffsetX,
+				tileY: tile.tileY + boardOffsetY,
+			})
+		);
+		tile && pickTileFunc
+			? pickTileFunc({
+					...tile,
+					tileX: tile.tileX + boardOffsetX,
+					tileY: tile.tileY + boardOffsetY,
+			  })
+			: {};
+	};
+
 	return (
 		<Animated.View
 			style={[
@@ -188,8 +217,12 @@ export default function Board({
 								<Square
 									spitLayout={spitOutLayoutParams}
 									key={j}
-									coordinateX={i}
-									coordinateY={j}
+									rowIndex={i}
+									colIndex={j}
+									// prettier-ignore
+									coordinateX={(j * colHeight) + ((j + 1) * colGap)}
+									// prettier-ignore
+									coordinateY={(i * rowHeight) + ((i + 1) * rowGap)}
 									length={rowHeight}
 									style={styles.cell}
 									bgStyle={squareBgStyle(i, j)}
@@ -204,6 +237,7 @@ export default function Board({
 									// }
 									// tile2={tileSV}
 									tileSharedValue={getDroppedTile(i, j)}
+									pickTile={pickTile}
 								/>
 							);
 						})}

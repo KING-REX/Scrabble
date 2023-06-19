@@ -28,6 +28,7 @@ type DragAndDropTileProps = {
 	tileLongPressEnded?: Function;
 	style?: ViewStyle;
 	enableDrag?: boolean;
+	tileDim?: Function;
 };
 
 type DragAndDropTileWithSVProps = {
@@ -51,6 +52,7 @@ const DragAndDropTile = ({
 	tileLongPressEnded,
 	style,
 	enableDrag,
+	tileDim,
 }: DragAndDropTileProps & TileProps): JSX.Element => {
 	console.log("Prop enable drag is: " + enableDrag);
 	// const [_enableDrag, setEnableDrag] = React.useState(enableDrag ?? true);
@@ -131,7 +133,7 @@ const DragAndDropTile = ({
 					PanGestureHandlerEventPayload & PanGestureChangeEventPayload
 				>
 			) => {
-				console.log("Velocity[X&Y]:", event.velocityX, event.velocityY);
+				// console.log("Velocity[X&Y]:", event.velocityX, event.velocityY);
 				// console.log(yToRowIndex(event.absoluteY))
 
 				// console.log("Tile Absolute Y:", tileAbsoluteY);
@@ -162,14 +164,16 @@ const DragAndDropTile = ({
 			onLongPressStarted={(
 				event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>
 			) => {
-				console.log("Tile lp started!");
-				tileLongPressStarted ? tileLongPressStarted() : {};
+				console.log("Tile lp started at coord: " + tileAbsoluteX + ", " + tileAbsoluteY);
+				tileLongPressStarted
+					? tileLongPressStarted({ event, tileX: tileAbsoluteX, tileY: tileAbsoluteY })
+					: {};
 			}}
 			onLongPressEnded={(
 				event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>
 			) => {
 				console.log("Tile lp ended!");
-				tileLongPressEnded ? tileLongPressEnded() : {};
+				tileLongPressEnded ? tileLongPressEnded(event) : {};
 			}}
 			onLayout={(event) => {
 				tileAbsoluteX = event.nativeEvent.layout.x;

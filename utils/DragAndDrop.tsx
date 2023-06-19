@@ -89,14 +89,15 @@ const DragAndDrop = ({
 	longPressGesture
 		.onStart((event) => {
 			console.log("Long Press Started");
-			onLongPressStarted ? onLongPressStarted() : {};
+			// console.log("Longpress absoluteX&Y:", event.absoluteX, event.absoluteY);
+			onLongPressStarted ? onLongPressStarted(event) : {};
 		})
 		.onEnd((event) => {
 			console.log("Long Press Ended");
-			onLongPressEnded ? onLongPressEnded() : {};
+			onLongPressEnded ? onLongPressEnded(event) : {};
 		});
 
-	const simultaneous = Gesture.Simultaneous(panGesture, longPressGesture);
+	const simultaneous = Gesture.Simultaneous(longPressGesture, panGesture);
 
 	return (
 		// <GestureHandlerRootView>
@@ -118,17 +119,17 @@ const DragAndDrop = ({
 
 		/* ----------------------------------------------------------------------- */
 
-		<GestureDetector
-			gesture={
-				enableDrag === true || enableDrag === undefined ? simultaneous : longPressGesture
-			}>
+		<GestureDetector gesture={simultaneous}>
 			<Animated.View
 				onLayout={(event) => (onLayout ? onLayout(event) : undefined)}
 				style={[
 					style,
-					useAnimatedStyle(() => ({
-						transform: [{ translateX: x.value }, { translateY: y.value }],
-					})),
+					//prettier-ignore
+					(enableDrag === true) || (enableDrag === undefined)
+						? useAnimatedStyle(() => ({
+								transform: [{ translateX: x.value }, { translateY: y.value }],
+						  }))
+						: undefined,
 				]}>
 				{children}
 			</Animated.View>

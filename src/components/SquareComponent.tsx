@@ -16,6 +16,10 @@ import Tile, { NeoShadowTile, letter } from "./TileComponent";
 import DragAndDropTile from "../tests/DragAndDropTile";
 import { Shadow } from "react-native-neomorph-shadows";
 import DragAndDrop from "../../utils/DragAndDrop";
+import {
+	GestureStateChangeEvent,
+	LongPressGestureHandlerEventPayload,
+} from "react-native-gesture-handler";
 
 export enum SquareType {
 	NONE,
@@ -37,20 +41,27 @@ type SquareComponentProps = {
 type SquareProps = {
 	length: number;
 	type?: SquareType;
+	rowIndex: number;
+	colIndex: number;
 	coordinateX: number;
 	coordinateY: number;
 	tileElement?: JSX.Element;
-	tileSharedValue?: SharedValue<{ letter: letter; tileLength: number } | undefined>;
+	tileSharedValue?: SharedValue<
+		{ letter: letter; tileLength: number; tileX: number; tileY: number } | undefined
+	>;
 	// tile2?: SharedValue<JSX.Element | undefined>;
 	style?: StyleProp<ViewStyle>;
 	bgColor?: ColorValue;
 	bgStyle?: AnimateStyle<ViewStyle>;
+	pickTile?: Function;
 	spitLayout?: Function;
 };
 
 export default function Square({
 	length,
 	type,
+	rowIndex,
+	colIndex,
 	coordinateX,
 	coordinateY,
 	// tile2,
@@ -59,19 +70,24 @@ export default function Square({
 	style,
 	bgColor,
 	bgStyle,
+	pickTile,
 	spitLayout,
 }: SquareProps): JSX.Element {
 	const [_length, setLength] = React.useState(length ?? 0);
 	const [_type, setType] = React.useState(type ?? SquareType.NONE);
-	const [coordinates, setCoordinates] = React.useState(
+	const indexOnBoard = React.useState(
 		{
-			x: coordinateX,
-			y: coordinateY,
+			x: rowIndex,
+			y: colIndex,
 		} ?? {
 			x: 0,
 			y: 0,
 		}
-	);
+	)[0];
+
+	// console.log("IndexONBoard:", JSON.stringify(indexOnBoard));
+
+	// console.log("Coord:", coordinateX, coordinateY);
 	const [isOccupied, setOccupied] = React.useState(
 		tileSharedValue && tileSharedValue.value ? true : false
 	);
@@ -81,9 +97,9 @@ export default function Square({
 	useDerivedValue(() => {
 		if (tileSharedValue && tileSharedValue.value) {
 			// console.log("Tile3: " + JSON.stringify(tile3.value));
-			runOnJS(setTileSV)(tileSharedValue!.value);
+			runOnJS(setTileSV)(tileSharedValue.value);
 			runOnJS(setOccupied)(true);
-			runOnJS(setLocked)(true);
+			// runOnJS(setLocked)(true);
 		} else {
 			runOnJS(setTileSV)(undefined);
 			runOnJS(setOccupied)(false);
@@ -91,9 +107,23 @@ export default function Square({
 		}
 	});
 
+	// React.useEffect(() => {
+	// 	console.log("Tile is", isLocked ? "locked!" : "notLocked!");
+	// }, [isLocked]);
+
 	React.useEffect(() => {
-		console.log("Tile is", isLocked ? "locked!" : "notLocked!");
-	}, [isLocked]);
+		setOccupied(tileValue ? true : false);
+	}, [tileValue]);
+
+	function getTileCoord(label: string): number {
+		if (label === "x".toLowerCase() || label === "x".toUpperCase()) {
+			return coordinateX;
+		} else if (label === "y".toLowerCase() || label === "y".toUpperCase()) {
+			return coordinateY;
+		}
+
+		return -1;
+	}
 
 	return (
 		<Animated.View
@@ -121,11 +151,33 @@ export default function Square({
 							letter={tileValue.letter}
 							tileLength={tileValue.tileLength}
 							tileType="shadow"
-							enableDrag={!isLocked}
+							enableDrag={false}
 							style={{ zIndex: 30 }}
-							tileLongPressStarted={() => {
-								setLocked(false);
+							tileDragStarted={() => {
+								const tile = {
+									letter: tileValue.letter,
+									tileLength: tileValue.tileLength,
+									tileX: getTileCoord("x"),
+									tileY: getTileCoord("y"),
+								};
+								if (!isLocked) {
+									console.log("Picking Tile!!!!");
+									pickTile ? pickTile(tile) : {};
+									setOccupied(false);
+									setTileSV(undefined);
+								}
+								console.log(
+									"Tile from inside the square component:",
+									JSON.stringify(tile)
+								);
 							}}
+							tileLongPressStarted={({
+								event,
+							}: {
+								event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>;
+								tileX: number;
+								tileY: number;
+							}) => {}}
 						/>
 					) : (
 						tileElement

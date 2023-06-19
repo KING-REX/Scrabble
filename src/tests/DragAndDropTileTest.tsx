@@ -34,6 +34,29 @@ const DragAndDropTileTest = (): JSX.Element => {
 	const letter: SharedValue<letter> = useSharedValue("H");
 	const tileLength: SharedValue<number> = useSharedValue(50);
 
+	const [pickedT, setPickedT] = React.useState<JSX.Element | undefined>(undefined);
+
+	const pickTileFunc = (tile: {
+		letter: letter;
+		tileLength: number;
+		tileX: number;
+		tileY: number;
+	}) => {
+		setPickedT(
+			<DragAndDropTile
+				letter={tile.letter}
+				tileLength={tile.tileLength}
+				enableDrag={true}
+				tileType="shadow"
+				style={{
+					position: "absolute",
+					top: tile.tileY,
+					left: tile.tileX,
+				}}
+			/>
+		);
+	};
+
 	const tileIsDragging: SharedValue<boolean> = useSharedValue(false);
 	const tileDimensions: SharedValue<
 		{ x: number; y: number; width: number; height: number } | undefined
@@ -43,8 +66,9 @@ const DragAndDropTileTest = (): JSX.Element => {
 		width: 0,
 		height: 0,
 	});
-	const tileDropped: SharedValue<{ letter: letter; tileLength: number } | undefined> =
-		useSharedValue(undefined);
+	const tileDropped: SharedValue<
+		{ letter: letter; tileLength: number; tileX: number; tileY: number } | undefined
+	> = useSharedValue(undefined);
 
 	const tilePicked: SharedValue<{ letter: letter; tileLength: number } | undefined> =
 		useSharedValue(undefined);
@@ -62,6 +86,7 @@ const DragAndDropTileTest = (): JSX.Element => {
 				isTileDragging={tileIsDragging}
 				tileDimensions={tileDimensions}
 				droppedTile={tileDropped}
+				pickTileFunc={pickTileFunc}
 			/>
 
 			{(!hasDropped || hasPicked) && (
@@ -93,16 +118,20 @@ const DragAndDropTileTest = (): JSX.Element => {
 						event: GestureStateChangeEvent<PanGestureHandlerEventPayload>
 					) => {
 						tileIsDragging.value = false;
-						tileDimensions.value = undefined;
 						tileDropped.value = {
 							letter: letter.value,
 							tileLength: tileLength.value,
+							tileX: tileDimensions.value!.x,
+							tileY: tileDimensions.value!.y,
 						};
+						tileDimensions.value = undefined;
 						setHasDropped(true);
 					}}
 					style={{ position: "absolute", bottom: 100 }}
 				/>
 			)}
+
+			{pickedT !== undefined && pickedT}
 		</View>
 	);
 };
