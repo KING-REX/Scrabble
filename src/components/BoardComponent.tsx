@@ -7,6 +7,7 @@ import Animated, {
 	AnimateStyle,
 	useDerivedValue,
 	SharedValue,
+	runOnJS,
 } from "react-native-reanimated";
 import Square from "./SquareComponent";
 import Tile, { letter } from "./TileComponent";
@@ -30,6 +31,8 @@ type BoardProps = {
 		{ letter: letter; tileLength: number; tileX: number; tileY: number } | undefined
 	>;
 	pickTileFunc?: Function;
+	indices?: (rowIndex: number, colIndex: number) => void;
+	getCoordinates?: (coordinateX: number, coordinateY: number) => void;
 	style?: AnimateStyle<ViewStyle>;
 };
 
@@ -44,18 +47,15 @@ export default function Board({
 	isTileDragging,
 	droppedTile,
 	pickTileFunc,
+	indices,
+	getCoordinates,
 	style,
 }: BoardProps): JSX.Element {
-	const tileSV = useSharedValue(
-		droppedTile && droppedTile.value && (
-			<Tile tileLength={droppedTile.value.tileLength} letter={droppedTile.value.letter} />
-		)
-	);
-
 	const [boardOffsetX, setBoardOffsetX] = React.useState(-1);
 	const [boardOffsetY, setBoardOffsetY] = React.useState(-1);
 	const [boardHeight, setBoardHeight] = React.useState(-1);
 	const [boardWidth, setBoardWidth] = React.useState(-1);
+	const [board, setBoard] = React.useState(null);
 
 	const boardOffset = (boardLayout: LayoutRectangle) => {
 		setBoardOffsetX(boardLayout.x);
@@ -162,9 +162,11 @@ export default function Board({
 
 	const getDroppedTile = (i: number, j: number) =>
 		useDerivedValue(() => {
-			if (rowIndex.value === i && colIndex.value === j && droppedTile && droppedTile.value)
-				return droppedTile.value;
-			else return undefined;
+			if (rowIndex.value === i && colIndex.value === j) {
+				indices ? runOnJS(indices)(i, j) : {};
+				if (droppedTile && droppedTile.value) return droppedTile.value;
+				else return undefined;
+			}
 		});
 
 	const pickTile = (tile: {
@@ -173,14 +175,14 @@ export default function Board({
 		tileX: number;
 		tileY: number;
 	}) => {
-		console.log(
-			"Tile details:",
-			JSON.stringify({
-				...tile,
-				tileX: tile.tileX + boardOffsetX,
-				tileY: tile.tileY + boardOffsetY,
-			})
-		);
+		// console.log(
+		// 	"Tile details:",
+		// 	JSON.stringify({
+		// 		...tile,
+		// 		tileX: tile.tileX + boardOffsetX,
+		// 		tileY: tile.tileY + boardOffsetY,
+		// 	})
+		// );
 		tile && pickTileFunc
 			? pickTileFunc({
 					...tile,
@@ -213,6 +215,22 @@ export default function Board({
 						style={[styles.row, {}]}
 						onLayout={(event) => currentRowOffset(event.nativeEvent.layout)}>
 						{cells.map((_, j) => {
+							//prettier-ignore
+							let coordinateX = (j * colHeight) + ((j + 1) * colGap);
+							//prettier-ignore
+							let coordinateY = (i * rowHeight) + ((i + 1) * rowGap);
+
+							useDerivedValue(() => {
+								if (rowIndex.value === i && colIndex.value === j) {
+									getCoordinates
+										? runOnJS(getCoordinates)(
+												coordinateX + boardOffsetX,
+												coordinateY + boardOffsetY
+										  )
+										: {};
+								}
+							});
+
 							return (
 								<Square
 									spitLayout={spitOutLayoutParams}
@@ -220,9 +238,9 @@ export default function Board({
 									rowIndex={i}
 									colIndex={j}
 									// prettier-ignore
-									coordinateX={(j * colHeight) + ((j + 1) * colGap)}
+									coordinateX={coordinateX}
 									// prettier-ignore
-									coordinateY={(i * rowHeight) + ((i + 1) * rowGap)}
+									coordinateY={coordinateY}
 									length={rowHeight}
 									style={styles.cell}
 									bgStyle={squareBgStyle(i, j)}

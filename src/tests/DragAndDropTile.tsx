@@ -15,7 +15,7 @@ import Tile, {
 	TileProps,
 	letter,
 } from "../components/TileComponent";
-import { SharedValue, useSharedValue } from "react-native-reanimated";
+import { AnimateStyle, SharedValue, useSharedValue } from "react-native-reanimated";
 
 type TileType = "normal" | "shadow";
 
@@ -27,6 +27,7 @@ type DragAndDropTileProps = {
 	tileLongPressStarted?: Function;
 	tileLongPressEnded?: Function;
 	style?: ViewStyle;
+	animatedStyle?: AnimateStyle<ViewStyle>;
 	enableDrag?: boolean;
 	tileDim?: Function;
 };
@@ -51,10 +52,12 @@ const DragAndDropTile = ({
 	tileLongPressStarted,
 	tileLongPressEnded,
 	style,
+	animatedStyle,
 	enableDrag,
 	tileDim,
+	onLayout,
 }: DragAndDropTileProps & TileProps): JSX.Element => {
-	console.log("Prop enable drag is: " + enableDrag);
+	// console.log("Prop enable drag is: " + enableDrag);
 	// const [_enableDrag, setEnableDrag] = React.useState(enableDrag ?? true);
 	// console.log("State enable drag is: " + _enableDrag);
 	const tileDimensions = {
@@ -131,7 +134,8 @@ const DragAndDropTile = ({
 			onDrag={(
 				event: GestureUpdateEvent<
 					PanGestureHandlerEventPayload & PanGestureChangeEventPayload
-				>
+				>,
+				obj: { x: SharedValue<number>; y: SharedValue<number> }
 			) => {
 				// console.log("Velocity[X&Y]:", event.velocityX, event.velocityY);
 				// console.log(yToRowIndex(event.absoluteY))
@@ -154,7 +158,7 @@ const DragAndDropTile = ({
 
 				changedTileOffset(tileAbsoluteX, tileAbsoluteY);
 
-				tileDragging ? tileDragging(event, tileDimensions) : {};
+				tileDragging ? tileDragging(event, tileDimensions, obj) : {};
 			}}
 			onDrop={(event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
 				console.log("Dropped at:", event.absoluteX, event.absoluteY);
@@ -180,24 +184,13 @@ const DragAndDropTile = ({
 				console.log("TAX:", tileAbsoluteX);
 				tileAbsoluteY = event.nativeEvent.layout.y;
 				console.log("TAY:", tileAbsoluteY);
+				onLayout ? onLayout(event) : {};
 			}}
-			style={[style, { zIndex: 50 }]}>
+			style={[style, { zIndex: 50 }]}
+			animatedStyle={animatedStyle}>
 			{contents()}
 		</DragAndDrop>
 	);
 };
-
-export const DragAndDropTileWithSV = ({
-	letterSV,
-	tileLengthSV,
-	tileType,
-	tileDragStarted,
-	tileDragging,
-	tileDragEnded,
-	tileLongPressStarted,
-	tileLongPressEnded,
-	style,
-	enableDrag,
-}: DragAndDropTileWithSVProps & DragAndDropTileProps) => {};
 
 export default DragAndDropTile;

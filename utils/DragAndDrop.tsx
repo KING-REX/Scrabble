@@ -1,4 +1,4 @@
-import { View, Text, ViewProps } from "react-native";
+import { View, Text, ViewProps, ViewStyle } from "react-native";
 import React from "react";
 import {
 	Gesture,
@@ -8,6 +8,8 @@ import {
 	PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
+	AnimateStyle,
+	AnimatedStyleProp,
 	useAnimatedGestureHandler,
 	useAnimatedStyle,
 	useSharedValue,
@@ -21,6 +23,7 @@ type DragAndDropProps = {
 	onDrop?: Function;
 	onLongPressStarted?: Function;
 	onLongPressEnded?: Function;
+	animatedStyle?: AnimateStyle<ViewStyle>;
 };
 
 const DragAndDrop = ({
@@ -33,6 +36,7 @@ const DragAndDrop = ({
 	onLongPressEnded,
 	onLayout,
 	style,
+	animatedStyle,
 }: DragAndDropProps & ViewProps): JSX.Element => {
 	const x = useSharedValue(0);
 	const y = useSharedValue(0);
@@ -76,7 +80,7 @@ const DragAndDrop = ({
 			x.value = xOffset.value + event.translationX;
 			y.value = yOffset.value + event.translationY;
 			// console.log("Dragging: ", x.value, y.value);
-			onDrag ? onDrag(event) : {};
+			onDrag ? onDrag(event, { x, y }) : {};
 		})
 		.onEnd((event) => {
 			// console.log("Dropped: ", event.translationX, event.translationY);
@@ -124,6 +128,7 @@ const DragAndDrop = ({
 				onLayout={(event) => (onLayout ? onLayout(event) : undefined)}
 				style={[
 					style,
+					animatedStyle,
 					//prettier-ignore
 					(enableDrag === true) || (enableDrag === undefined)
 						? useAnimatedStyle(() => ({

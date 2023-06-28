@@ -7,7 +7,8 @@
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BoardComponentTest from "../tests/BoardComponentTest";
-import DragAndDropTileTest from "../tests/DragAndDropTileTest";
+import DragAndDropTileTest from "../tests/DragAndDropTileTestWithDropAndPick";
+// import DragAndDropTileTest from "../tests/DragAndDropTileTestWithCoord";
 import DraggableTileTest from "../tests/DraggableTileTest";
 import FillOrEmptyBoardSquaresTest from "../tests/FillOrEmptyBoardSquaresTest";
 import PutOrRemoveDraggableTileTest from "../tests/PutOrRemoveDraggableTileTest";

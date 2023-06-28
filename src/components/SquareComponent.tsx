@@ -53,7 +53,7 @@ type SquareProps = {
 	style?: StyleProp<ViewStyle>;
 	bgColor?: ColorValue;
 	bgStyle?: AnimateStyle<ViewStyle>;
-	pickTile?: Function;
+	pickTile: (tile: { letter: letter; tileLength: number; tileX: number; tileY: number }) => void;
 	spitLayout?: Function;
 };
 
@@ -92,17 +92,32 @@ export default function Square({
 		tileSharedValue && tileSharedValue.value ? true : false
 	);
 	const [isLocked, setLocked] = React.useState(false);
-	const [tileValue, setTileSV] = React.useState(isOccupied ? tileSharedValue!.value : undefined);
 
-	useDerivedValue(() => {
+	const tileSV = useSharedValue<
+		| {
+				letter: letter;
+				tileLength: number;
+				tileX: number;
+				tileY: number;
+		  }
+		| undefined
+	>(undefined);
+
+	// React.useEffect(() => {
+	// 	console.log("IsLocked changed to:", isLocked);
+	// }, [isLocked]);
+
+	React.useEffect(() => {
 		if (tileSharedValue && tileSharedValue.value) {
+			// console.log("There's a tileSharedValue... ");
 			// console.log("Tile3: " + JSON.stringify(tile3.value));
-			runOnJS(setTileSV)(tileSharedValue.value);
-			runOnJS(setOccupied)(true);
+			tileSV.value = tileSharedValue.value;
+			// runOnJS(setOccupied)(true);
 			// runOnJS(setLocked)(true);
 		} else {
-			runOnJS(setTileSV)(undefined);
-			runOnJS(setOccupied)(false);
+			// console.log("There's no tileSharedValue... ");
+			tileSV.value = undefined;
+			// runOnJS(setOccupied)(false);
 			runOnJS(setLocked)(false);
 		}
 	});
@@ -111,9 +126,30 @@ export default function Square({
 	// 	console.log("Tile is", isLocked ? "locked!" : "notLocked!");
 	// }, [isLocked]);
 
-	React.useEffect(() => {
-		setOccupied(tileValue ? true : false);
-	}, [tileValue]);
+	useDerivedValue(() => {
+		// prettier-ignore
+		runOnJS(setOccupied)((tileSV && tileSV.value) ? true : false);
+		// console.log("Occupied:", isOccupied);
+	});
+
+	useDerivedValue(() => {
+		if (!isLocked && tileSV && tileSV.value) {
+			const tile = {
+				letter: tileSV.value.letter,
+				tileLength: tileSV.value.tileLength,
+				tileX: coordinateX,
+				tileY: coordinateY,
+			};
+			// console.log("Picking Tile!!!!");
+			pickTile ? runOnJS(pickTile)(tile) : {};
+			// runOnJS(setOccupied)(false);
+			tileSV.value = undefined;
+
+			// console.log("There's a tileSharedValue...");
+			console.log("Tile from inside the square component:", JSON.stringify(tile));
+		}
+		// else console.log("There's no tileSharedValue...");
+	});
 
 	function getTileCoord(label: string): number {
 		if (label === "x".toLowerCase() || label === "x".toUpperCase()) {
@@ -146,31 +182,19 @@ export default function Square({
 				// bottom={isOccupied ? true : false}
 				containerStyle={{ zIndex: -10 }}>
 				<Animated.View>
-					{tileValue ? (
+					{
+						//prettier-ignore
+						(tileSV && tileSV.value && isLocked) ? (
 						<DragAndDropTile
-							letter={tileValue.letter}
-							tileLength={tileValue.tileLength}
+							onLayout={() => {
+								console.log("Dropped tile layout on square!!!");
+							}}
+							letter={tileSV.value.letter}
+							tileLength={tileSV.value.tileLength}
 							tileType="shadow"
 							enableDrag={false}
 							style={{ zIndex: 30 }}
-							tileDragStarted={() => {
-								const tile = {
-									letter: tileValue.letter,
-									tileLength: tileValue.tileLength,
-									tileX: getTileCoord("x"),
-									tileY: getTileCoord("y"),
-								};
-								if (!isLocked) {
-									console.log("Picking Tile!!!!");
-									pickTile ? pickTile(tile) : {};
-									setOccupied(false);
-									setTileSV(undefined);
-								}
-								console.log(
-									"Tile from inside the square component:",
-									JSON.stringify(tile)
-								);
-							}}
+							tileDragStarted={() => {}}
 							tileLongPressStarted={({
 								event,
 							}: {
@@ -180,8 +204,10 @@ export default function Square({
 							}) => {}}
 						/>
 					) : (
-						tileElement
-					)}
+						// tileElement
+						<></>
+					)
+					}
 				</Animated.View>
 			</InsetShadow>
 		</Animated.View>
