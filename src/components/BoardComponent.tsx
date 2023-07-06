@@ -12,6 +12,9 @@ import Animated, {
 import Square from "./SquareComponent";
 import Tile, { letter } from "./TileComponent";
 import DragAndDropTile from "../tests/DragAndDropTile";
+import InsetShadow from "react-native-inset-shadow";
+import { BOARD_LENGTH, SIZE, gap } from "../helpers/Notation";
+import { Neomorph, Shadow } from "react-native-neomorph-shadows";
 // import Board from '../objects/board/Board';
 // import SquareComponent from "./SquareComponent";
 // import Square from "../objects/square/Square";
@@ -36,10 +39,8 @@ type BoardProps = {
 	style?: AnimateStyle<ViewStyle>;
 };
 
-const rowHeight = 50;
-const colHeight = rowHeight;
-const rowGap = 4;
-const colGap = rowGap;
+export let board_OffsetX: number;
+export let board_OffsetY: number;
 
 export default function Board({
 	size,
@@ -57,12 +58,16 @@ export default function Board({
 	const [boardWidth, setBoardWidth] = React.useState(-1);
 	const [board, setBoard] = React.useState(null);
 
-	const boardOffset = (boardLayout: LayoutRectangle) => {
-		setBoardOffsetX(boardLayout.x);
-		setBoardOffsetY(boardLayout.y);
-		setBoardHeight(boardLayout.height);
-		setBoardWidth(boardLayout.width);
-		console.log("Board offset X&Y:", boardLayout.x, boardLayout.y);
+	const boardOffset = ({ x, y, height, width }: LayoutRectangle) => {
+		setBoardOffsetX(x);
+		setBoardOffsetY(y);
+		setBoardHeight(height);
+		setBoardWidth(width);
+
+		board_OffsetX = x;
+		board_OffsetY = y;
+
+		console.log("Board offset X&Y:", x, y);
 	};
 
 	const rowIndex = useSharedValue(-1);
@@ -73,7 +78,7 @@ export default function Board({
 	let tileAbsoluteX: number = 0;
 	let tileAbsoluteY: number = 0;
 
-	const BOARD_SIZE: number = size ?? 5;
+	// const BOARD_LENGTH: number = size ?? 15;
 
 	useDerivedValue(() => {
 		if (isTileDragging && tileDimensions && tileDimensions.value) {
@@ -82,15 +87,11 @@ export default function Board({
 			tileAbsoluteX = tileDimensions.value.x;
 			tileAbsoluteY = tileDimensions.value.y;
 			// console.log("TileAbsoluteX:", tileAbsoluteX);
-			let roundedX: number = Math.round(
-				(tileAbsoluteX - boardOffsetX) / (colHeight + colGap)
-			);
-			let roundedY: number = Math.round(
-				(tileAbsoluteY - boardOffsetY) / (rowHeight + rowGap)
-			);
+			let roundedX: number = Math.round((tileAbsoluteX - boardOffsetX) / (SIZE + gap));
+			let roundedY: number = Math.round((tileAbsoluteY - boardOffsetY) / (SIZE + gap));
 
-			rowIndex.value = roundedY === -0 ? 0 : roundedY < BOARD_SIZE ? roundedY : -1;
-			colIndex.value = roundedX === -0 ? 0 : roundedX < BOARD_SIZE ? roundedX : -1;
+			rowIndex.value = roundedY === -0 ? 0 : roundedY < BOARD_LENGTH ? roundedY : -1;
+			colIndex.value = roundedX === -0 ? 0 : roundedX < BOARD_LENGTH ? roundedX : -1;
 
 			// console.log("RoundedX:", roundedX);
 			// console.log("RoundedY:", roundedY);
@@ -143,8 +144,8 @@ export default function Board({
 	// 		return undefined;
 	// 	});
 
-	const rows = [...Array(BOARD_SIZE)].map((_, i) => i);
-	const cells = [...Array(BOARD_SIZE)].map((_, i) => i);
+	const rows = [...Array(BOARD_LENGTH)].map((_, i) => i);
+	const cells = [...Array(BOARD_LENGTH)].map((_, i) => i);
 
 	const squareBgStyle = (i: number, j: number) =>
 		useAnimatedStyle(() => {
@@ -216,47 +217,62 @@ export default function Board({
 						onLayout={(event) => currentRowOffset(event.nativeEvent.layout)}>
 						{cells.map((_, j) => {
 							//prettier-ignore
-							let coordinateX = (j * colHeight) + ((j + 1) * colGap);
+							let coordinateX = (j * SIZE) + ((j + 1) * gap);
 							//prettier-ignore
-							let coordinateY = (i * rowHeight) + ((i + 1) * rowGap);
+							let coordinateY = (i * SIZE) + ((i + 1) * gap);
 
-							useDerivedValue(() => {
-								if (rowIndex.value === i && colIndex.value === j) {
-									getCoordinates
-										? runOnJS(getCoordinates)(
-												coordinateX + boardOffsetX,
-												coordinateY + boardOffsetY
-										  )
-										: {};
-								}
-							});
+							// useDerivedValue(() => {
+							// 	if (rowIndex.value === i && colIndex.value === j) {
+							// 		getCoordinates
+							// 			? runOnJS(getCoordinates)(
+							// 					coordinateX + boardOffsetX,
+							// 					coordinateY + boardOffsetY
+							// 			  )
+							// 			: {};
+							// 	}
+							// });
 
 							return (
-								<Square
-									spitLayout={spitOutLayoutParams}
+								<Shadow
 									key={j}
-									rowIndex={i}
-									colIndex={j}
-									// prettier-ignore
-									coordinateX={coordinateX}
-									// prettier-ignore
-									coordinateY={coordinateY}
-									length={rowHeight}
-									style={styles.cell}
-									bgStyle={squareBgStyle(i, j)}
-									// tile={
-									// 	droppedTile &&
-									// 	droppedTile.value && (
-									// 		<Tile
-									// 			letter={droppedTile.value.letter}
-									// 			tileLength={droppedTile.value.tileLength}
-									// 		/>
-									// 	)
-									// }
-									// tile2={tileSV}
-									tileSharedValue={getDroppedTile(i, j)}
-									pickTile={pickTile}
-								/>
+									inner
+									useArt
+									style={{
+										height: SIZE,
+										width: SIZE,
+										backgroundColor: "#ddd",
+										shadowColor: "#000",
+										shadowOpacity: 1,
+										shadowRadius: 3,
+										borderRadius: 2,
+									}}>
+									<View></View>
+								</Shadow>
+								// <Square
+								// 	spitLayout={spitOutLayoutParams}
+								// 	key={j}
+								// 	rowIndex={i}
+								// 	colIndex={j}
+								// 	// prettier-ignore
+								// 	coordinateX={coordinateX}
+								// 	// prettier-ignore
+								// 	coordinateY={coordinateY}
+								// 	length={SIZE}
+								// 	style={styles.cell}
+								// 	bgStyle={squareBgStyle(i, j)}
+								// 	// tile={
+								// 	// 	droppedTile &&
+								// 	// 	droppedTile.value && (
+								// 	// 		<Tile
+								// 	// 			letter={droppedTile.value.letter}
+								// 	// 			tileLength={droppedTile.value.tileLength}
+								// 	// 		/>
+								// 	// 	)
+								// 	// }
+								// 	// tile2={tileSV}
+								// 	tileSharedValue={getDroppedTile(i, j)}
+								// 	pickTile={pickTile}
+								// />
 							);
 						})}
 					</Animated.View>
@@ -325,13 +341,13 @@ export default function Board({
 const styles = StyleSheet.create({
 	board: {
 		// width: "100%",
-		gap: rowGap,
-		padding: 4,
+		gap: gap,
+		padding: gap,
 		backgroundColor: "#fff",
 	},
 	row: {
 		// width: "100%",
-		columnGap: colGap,
+		columnGap: gap,
 		flexDirection: "row",
 		gap: 1,
 	},

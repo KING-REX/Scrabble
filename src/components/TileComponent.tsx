@@ -7,6 +7,8 @@ import {
 	Animated,
 	ImageSourcePropType,
 	Platform,
+	LayoutChangeEvent,
+	LayoutRectangle,
 } from "react-native";
 // import Tile from '../objects/tile/Tile';
 import { StyleProp } from "../../node_modules/react-native/Libraries/StyleSheet/StyleSheet";
@@ -64,7 +66,7 @@ type TileComponentProps = {
 export type TileProps = {
 	tileLength: number;
 	letter: letter;
-	onLayout?: Function;
+	onLayout?: (layout: LayoutRectangle) => void;
 };
 
 type DraggableTileProps = TileProps & {
@@ -87,7 +89,9 @@ export default function Tile({ tileLength, letter, onLayout }: TileProps): JSX.E
 			source={_tileImage}
 			style={{ width: _tileLength, height: _tileLength, overflow: "visible" }}
 			resizeMode="stretch"
-			onLayout={(event) => (onLayout ? onLayout(event.nativeEvent.layout) : {})}>
+			onLayout={(event: LayoutChangeEvent) =>
+				onLayout ? onLayout(event.nativeEvent.layout) : {}
+			}>
 			{/* <Text>{Platform.OS}</Text> */}
 		</ImageBackground>
 	);

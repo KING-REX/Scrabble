@@ -23,8 +23,10 @@ import Animated, {
 } from "react-native-reanimated";
 import Board from "../components/BoardComponent";
 import DragAndDropTile from "./DragAndDropTile";
+import DragAndDropTile2 from "./DragAndDropTile2";
+import { SIZE } from "../helpers/Notation";
 
-const rowHeight = 50;
+const rowHeight = 23;
 const colHeight = rowHeight;
 const rowGap = 4;
 const colGap = rowGap;
@@ -53,7 +55,7 @@ const DragAndDropTileTest = (): JSX.Element => {
 	const translationY = useSharedValue(0);
 
 	const letter: SharedValue<letter> = useSharedValue("H");
-	const tileLength: SharedValue<number> = useSharedValue(50);
+	const tileLength: SharedValue<number> = useSharedValue(23);
 
 	const tileOffset = useSharedValue<{ x: number; y: number }>({
 		x: -1,
@@ -195,17 +197,17 @@ const DragAndDropTileTest = (): JSX.Element => {
 	return (
 		<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 			<Board
-				isTileDragging={tileIsDragging}
-				tileDimensions={tileDimensions}
-				droppedTile={tileDropped}
-				pickTileFunc={pickTileFunc}
-				indices={getIndicesFromBoard}
-				getCoordinates={getCoordinates}
+			// isTileDragging={tileIsDragging}
+			// tileDimensions={tileDimensions}
+			// droppedTile={tileDropped}
+			// pickTileFunc={pickTileFunc}
+			// indices={getIndicesFromBoard}
+			// getCoordinates={getCoordinates}
 			/>
 
 			{/* {!hasDropped && pickedT} */}
 
-			{content(
+			{/* {content(
 				undefined,
 				// { marginTop: 30 },
 				useAnimatedStyle(() => {
@@ -254,9 +256,11 @@ const DragAndDropTileTest = (): JSX.Element => {
 						return {};
 					}
 				})
-			)}
+			)} */}
 
-			<Animated.View
+			<DragAndDropTile2 letter="H" tileLength={SIZE} />
+
+			{/* <Animated.View
 				style={useAnimatedStyle(() => {
 					return {
 						position: "absolute",
@@ -267,7 +271,7 @@ const DragAndDropTileTest = (): JSX.Element => {
 						top: coordinateY.value,
 						left: coordinateX.value,
 					};
-				})}></Animated.View>
+				})}></Animated.View> */}
 		</View>
 	);
 };

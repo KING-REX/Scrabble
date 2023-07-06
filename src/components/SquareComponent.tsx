@@ -22,6 +22,7 @@ import {
 } from "react-native-gesture-handler";
 
 export enum SquareType {
+	MIDDLE_SQUARE,
 	NONE,
 	DOUBLE_LETTER,
 	DOUBLE_WORD,
@@ -53,7 +54,7 @@ type SquareProps = {
 	style?: StyleProp<ViewStyle>;
 	bgColor?: ColorValue;
 	bgStyle?: AnimateStyle<ViewStyle>;
-	pickTile: (tile: { letter: letter; tileLength: number; tileX: number; tileY: number }) => void;
+	pickTile?: (tile: { letter: letter; tileLength: number; tileX: number; tileY: number }) => void;
 	spitLayout?: Function;
 };
 
@@ -88,10 +89,14 @@ export default function Square({
 	// console.log("IndexONBoard:", JSON.stringify(indexOnBoard));
 
 	// console.log("Coord:", coordinateX, coordinateY);
-	const [isOccupied, setOccupied] = React.useState(
-		tileSharedValue && tileSharedValue.value ? true : false
-	);
-	const [isLocked, setLocked] = React.useState(false);
+
+	// const [isOccupied, setOccupied] = React.useState(
+	// 	tileSharedValue && tileSharedValue.value ? true : false
+	// );
+
+	// const [isLocked, setLocked] = React.useState(false);
+
+	const isLocked = useSharedValue<boolean>(false);
 
 	const tileSV = useSharedValue<
 		| {
@@ -107,18 +112,20 @@ export default function Square({
 	// 	console.log("IsLocked changed to:", isLocked);
 	// }, [isLocked]);
 
-	React.useEffect(() => {
+	useDerivedValue(() => {
 		if (tileSharedValue && tileSharedValue.value) {
 			// console.log("There's a tileSharedValue... ");
 			// console.log("Tile3: " + JSON.stringify(tile3.value));
 			tileSV.value = tileSharedValue.value;
 			// runOnJS(setOccupied)(true);
 			// runOnJS(setLocked)(true);
+			// isLocked.value = true;
 		} else {
 			// console.log("There's no tileSharedValue... ");
 			tileSV.value = undefined;
 			// runOnJS(setOccupied)(false);
-			runOnJS(setLocked)(false);
+			isLocked.value = false;
+			// runOnJS(setLocked)(false);
 		}
 	});
 
@@ -126,14 +133,14 @@ export default function Square({
 	// 	console.log("Tile is", isLocked ? "locked!" : "notLocked!");
 	// }, [isLocked]);
 
-	useDerivedValue(() => {
-		// prettier-ignore
-		runOnJS(setOccupied)((tileSV && tileSV.value) ? true : false);
-		// console.log("Occupied:", isOccupied);
-	});
+	// useDerivedValue(() => {
+	// 	// prettier-ignore
+	// 	runOnJS(setOccupied)((tileSV && tileSV.value) ? true : false);
+	// 	// console.log("Occupied:", isOccupied);
+	// });
 
-	useDerivedValue(() => {
-		if (!isLocked && tileSV && tileSV.value) {
+	React.useEffect(() => {
+		if (isLocked.value === false && tileSV && tileSV.value) {
 			const tile = {
 				letter: tileSV.value.letter,
 				tileLength: tileSV.value.tileLength,
@@ -165,26 +172,28 @@ export default function Square({
 		<Animated.View
 			style={[
 				style,
+				// bgStyle,
 				{
 					height: length,
 					width: length,
-					backgroundColor: bgColor,
+					// backgroundColor: bgColor,
+					backgroundColor: "#eee",
+					borderRadius: 2,
 					zIndex: -10,
 				},
-				bgStyle,
 			]}
 			onLayout={(event) => (spitLayout ? spitLayout(event.nativeEvent.layout) : {})}>
 			<InsetShadow
 				shadowColor="#000"
 				shadowOpacity={1}
-				elevation={5}
+				elevation={2}
 				// right={isOccupied ? true : false}
 				// bottom={isOccupied ? true : false}
-				containerStyle={{ zIndex: -10 }}>
+				containerStyle={{ zIndex: -10, borderRadius: 2 }}>
 				<Animated.View>
 					{
 						//prettier-ignore
-						(tileSV && tileSV.value && isLocked) ? (
+						(tileSV && tileSV.value && isLocked.value === true) ? (
 						<DragAndDropTile
 							onLayout={() => {
 								console.log("Dropped tile layout on square!!!");

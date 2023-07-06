@@ -123,7 +123,7 @@ const DragAndDrop = ({
 
 		/* ----------------------------------------------------------------------- */
 
-		<GestureDetector gesture={simultaneous}>
+		<GestureDetector gesture={panGesture}>
 			<Animated.View
 				onLayout={(event) => (onLayout ? onLayout(event) : undefined)}
 				style={[

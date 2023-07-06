@@ -193,6 +193,7 @@ const DragAndDropTileTest = (): JSX.Element => {
 	return (
 		<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 			<Board
+				size={5}
 				isTileDragging={tileIsDragging}
 				tileDimensions={tileDimensions}
 				droppedTile={tileDropped}
@@ -200,6 +201,8 @@ const DragAndDropTileTest = (): JSX.Element => {
 				// indices={getIndicesFromBoard}
 				// getCoordinates={getCoordinates}
 			/>
+
+			{/* <Rack tileDrag={tileIsDragging} tileDimensions={tileDimensions} /> */}
 
 			{!hasDropped && pickedT}
 		</View>

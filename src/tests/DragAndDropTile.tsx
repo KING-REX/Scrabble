@@ -16,6 +16,7 @@ import Tile, {
 	letter,
 } from "../components/TileComponent";
 import { AnimateStyle, SharedValue, useSharedValue } from "react-native-reanimated";
+import { BOARD_LENGTH, SIZE, gap, toIndices } from "../helpers/Notation";
 
 type TileType = "normal" | "shadow";
 
@@ -31,16 +32,6 @@ type DragAndDropTileProps = {
 	enableDrag?: boolean;
 	tileDim?: Function;
 };
-
-type DragAndDropTileWithSVProps = {
-	letterSV: SharedValue<letter>;
-	tileLengthSV: SharedValue<number>;
-};
-
-const rowHeight = 50;
-const colHeight = rowHeight;
-const rowGap = 4;
-const colGap = rowGap;
 
 const DragAndDropTile = ({
 	letter,
@@ -79,8 +70,6 @@ const DragAndDropTile = ({
 
 	const rowIndex = useSharedValue(-1);
 	const colIndex = useSharedValue(-1);
-
-	const BOARD_SIZE: number = 5;
 
 	const initialTileOffset = (tileLayout: LayoutRectangle) => {
 		tileDimensions.height = tileLayout.height;
@@ -143,14 +132,19 @@ const DragAndDropTile = ({
 				// console.log("Tile Absolute Y:", tileAbsoluteY);
 				tileAbsoluteX = event.absoluteX - tileOffsetX;
 				tileAbsoluteY = event.absoluteY - tileOffsetY;
-				let roundedX: number = Math.round(
-					(tileAbsoluteX - boardOffsetX) / (colHeight + colGap)
-				);
-				let roundedY: number = Math.round(
-					(tileAbsoluteY - boardOffsetY) / (rowHeight + rowGap)
-				);
-				rowIndex.value = roundedY === -0 ? 0 : roundedY < BOARD_SIZE ? roundedY : -1;
-				colIndex.value = roundedX === -0 ? 0 : roundedX < BOARD_SIZE ? roundedX : -1;
+				let roundedX: number = Math.round((tileAbsoluteX - boardOffsetX) / (SIZE + gap));
+				let roundedY: number = Math.round((tileAbsoluteY - boardOffsetY) / (SIZE + gap));
+
+				const { row, col } = toIndices({
+					x: (tileAbsoluteX - boardOffsetX) / (SIZE + gap),
+					y: (tileAbsoluteY - boardOffsetY) / (SIZE + gap),
+				});
+
+				rowIndex.value = row;
+				rowIndex.value = roundedY === -0 ? 0 : roundedY < BOARD_LENGTH ? roundedY : -1;
+
+				colIndex.value = col;
+				colIndex.value = roundedX === -0 ? 0 : roundedX < BOARD_LENGTH ? roundedX : -1;
 
 				// console.log("Round:", round);
 				// console.log("Col Index:", colIndex.value);
@@ -184,7 +178,7 @@ const DragAndDropTile = ({
 				console.log("TAX:", tileAbsoluteX);
 				tileAbsoluteY = event.nativeEvent.layout.y;
 				console.log("TAY:", tileAbsoluteY);
-				onLayout ? onLayout(event) : {};
+				onLayout ? onLayout(event.nativeEvent.layout) : {};
 			}}
 			style={[style, { zIndex: 50 }]}
 			animatedStyle={animatedStyle}>

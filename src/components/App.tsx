@@ -7,8 +7,8 @@
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BoardComponentTest from "../tests/BoardComponentTest";
-import DragAndDropTileTest from "../tests/DragAndDropTileTestWithDropAndPick";
-// import DragAndDropTileTest from "../tests/DragAndDropTileTestWithCoord";
+// import DragAndDropTileTest from "../tests/DragAndDropTileTestWithDropAndPick";
+import DragAndDropTileTest from "../tests/DragAndDropTileTestWithCoord";
 import DraggableTileTest from "../tests/DraggableTileTest";
 import FillOrEmptyBoardSquaresTest from "../tests/FillOrEmptyBoardSquaresTest";
 import PutOrRemoveDraggableTileTest from "../tests/PutOrRemoveDraggableTileTest";
@@ -23,7 +23,6 @@ function App(): JSX.Element {
 	//This is just to test to see whether things are working out fine!
 	//The gui alternative for console.log()...
 	//This is not the main design !!!
-
 	return (
 		<GestureHandlerRootView style={{ backgroundColor: "#052a50", flex: 1 }}>
 			<DragAndDropTileTest />
