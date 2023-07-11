@@ -18,15 +18,19 @@ import SquareTest from "../tests/SquareTest";
 import ChessboardExample from "./DraggableTile";
 import Test2 from "./Test2";
 import React from "react";
+import { StatusBar, View } from "react-native";
 
 function App(): JSX.Element {
 	//This is just to test to see whether things are working out fine!
 	//The gui alternative for console.log()...
 	//This is not the main design !!!
 	return (
-		<GestureHandlerRootView style={{ backgroundColor: "#052a50", flex: 1 }}>
-			<DragAndDropTileTest />
-		</GestureHandlerRootView>
+		<>
+			<StatusBar hidden />
+			<GestureHandlerRootView style={{ backgroundColor: "#052a50", flex: 1 }}>
+				<DragAndDropTileTest />
+			</GestureHandlerRootView>
+		</>
 	);
 }
 

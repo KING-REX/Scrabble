@@ -24,7 +24,7 @@ import Animated, {
 import Board from "../components/BoardComponent";
 import DragAndDropTile from "./DragAndDropTile";
 import DragAndDropTile2 from "./DragAndDropTile2";
-import { SIZE } from "../helpers/Notation";
+import { MIDDLE_HEIGHT, MID_BOARD, SIZE, boardOffsetY } from "../helpers/Notation";
 
 const rowHeight = 23;
 const colHeight = rowHeight;

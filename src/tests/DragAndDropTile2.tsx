@@ -21,10 +21,20 @@ import Animated, {
 	AnimateStyle,
 	SharedValue,
 	useAnimatedStyle,
+	useDerivedValue,
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { BOARD_LENGTH, SIZE, gap, toIndices, toTranslation } from "../helpers/Notation";
+import {
+	BOARD_LENGTH,
+	INVALID,
+	SIZE,
+	boardOffsetX,
+	boardOffsetY,
+	gap,
+	toIndices,
+	toTranslation,
+} from "../helpers/Notation";
 
 type TileType = "normal" | "shadow";
 
@@ -56,33 +66,53 @@ const DragAndDropTile2 = ({
 	tileDim,
 	onLayout,
 }: DragAndDropTileProps & TileProps): JSX.Element => {
-	const initialX = useSharedValue(-1);
-	const initialY = useSharedValue(-1);
+	const initialOffsetX = useSharedValue(30);
+	const initialIOffsetY = useSharedValue(50);
+	const initialScaleValue = 2;
 
-	const initialTileOffset = ({ x, y }: LayoutRectangle) => {
-		initialX.value = x;
-		initialY.value = y;
+	const initialTileOffset = (event: LayoutChangeEvent) => {
+		const x = event.nativeEvent.layout.x;
+		const y = event.nativeEvent.layout.y;
+		console.log("Initial Tile Offsets: " + x, y);
+		initialOffsetX.value = x;
+		initialIOffsetY.value = y;
 	};
 
-	const dropTile = ({ row, col }: { row: number; col: number }) => {
+	const dropTile = ({
+		indicesObj: { row, col },
+		offsets,
+	}: {
+		indicesObj: { row: number; col: number };
+		offsets?: { offsetX: number; offsetY: number };
+	}) => {
 		let validMove: boolean = !(row < 0 || row > 14 || col < 0 || col > 14);
 
-		const { x, y } = toTranslation({ row, col });
+		const { x, y } = toTranslation({
+			indicesObj: { row, col },
+			offsets: { offsetX: initialOffsetX.value, offsetY: initialIOffsetY.value },
+		});
 
-		translateX.value = withTiming(validMove ? x : initialX.value);
-		translateY.value = withTiming(validMove ? y : initialY.value);
+		translateX.value = withTiming(validMove ? x : initialOffsetX.value);
+		translateY.value = withTiming(validMove ? y : initialIOffsetY.value);
+
+		scaleX.value = withTiming(validMove ? 1 : initialScaleValue);
+		scaleY.value = withTiming(validMove ? 1 : initialScaleValue);
 
 		console.log("Translating to: " + x, y);
 	};
 
-	const scaleX = useSharedValue(1);
-	const scaleY = useSharedValue(1);
+	const opacity = useSharedValue(1);
+
+	const scaleX = useSharedValue(initialScaleValue);
+	const scaleY = useSharedValue(initialScaleValue);
 
 	const translateX = useSharedValue(0);
 	const translateY = useSharedValue(0);
 
 	const offsetX = useSharedValue(0);
 	const offsetY = useSharedValue(0);
+
+	const isDragging = useSharedValue(false);
 
 	const panGesture = Gesture.Pan();
 	panGesture
@@ -92,43 +122,67 @@ const DragAndDropTile2 = ({
 
 			scaleX.value = withTiming(2);
 			scaleY.value = withTiming(2);
+
+			opacity.value = 0.5;
+
+			isDragging.value = true;
 		})
 		.onChange(({ translationX, translationY }) => {
 			translateX.value = translationX + offsetX.value;
 			translateY.value = translationY + offsetY.value;
-			// console.log("Changing...");
 		})
 		.onEnd(() => {
-			const to = toIndices({ x: translateX.value, y: translateY.value });
-			console.log("Indices dropped[row, col]: " + to.row, to.col);
+			const to = toIndices({
+				translationObj: { x: translateX.value, y: translateY.value },
+				offsets: { offsetX: initialOffsetX.value, offsetY: initialIOffsetY.value },
+			});
 			dropTile(to);
 
-			scaleX.value = withTiming(1);
-			scaleY.value = withTiming(1);
+			opacity.value = 1;
+
+			isDragging.value = false;
 		});
 
-	const styles = useAnimatedStyle(() => {
+	const underlay = useAnimatedStyle(() => {
+		const obj = toTranslation(
+			toIndices({
+				translationObj: { x: translateX.value, y: translateY.value },
+				offsets: { offsetX: initialOffsetX.value, offsetY: initialIOffsetY.value },
+			})
+		);
+		console.log("Obj values:", obj.x, obj.y);
+		// console.log(toIndices({ x: translateX.value, y: translateY.value }));
+		// console.log(translateX.value, translateY.value);
+
 		return {
 			position: "absolute",
-			top: 0,
-			left: 0,
-			transform: [
-				{ translateX: translateX.value },
-				{ translateY: translateY.value },
-				{ scaleX: scaleX.value },
-				{ scaleY: scaleY.value },
-			],
+			height: SIZE,
+			width: SIZE,
+			backgroundColor: "#ddff00",
+			// transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
+			transform: [{ translateX: obj.x }, { translateY: obj.y }],
+			opacity: obj.x !== INVALID && obj.y !== INVALID && isDragging.value ? 0.7 : 0,
 		};
 	});
+
+	const styles = useAnimatedStyle(() => ({
+		position: "absolute",
+		top: initialIOffsetY.value,
+		left: initialOffsetX.value,
+		transform: [
+			{ translateX: translateX.value },
+			{ translateY: translateY.value },
+			{ scaleX: scaleX.value },
+			{ scaleY: scaleY.value },
+		],
+		opacity: opacity.value,
+	}));
 	return (
 		<>
+			<Animated.View style={underlay} />
 			<GestureDetector gesture={panGesture}>
-				<Animated.View style={styles}>
-					<NeoShadowTile
-						letter={letter}
-						tileLength={tileLength}
-						onLayout={initialTileOffset}
-					/>
+				<Animated.View style={styles} onLayout={initialTileOffset}>
+					<NeoShadowTile letter={letter} tileLength={tileLength} />
 				</Animated.View>
 			</GestureDetector>
 			{/* <DragAndDrop

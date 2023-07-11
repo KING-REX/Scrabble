@@ -135,9 +135,13 @@ const DragAndDropTile = ({
 				let roundedX: number = Math.round((tileAbsoluteX - boardOffsetX) / (SIZE + gap));
 				let roundedY: number = Math.round((tileAbsoluteY - boardOffsetY) / (SIZE + gap));
 
-				const { row, col } = toIndices({
-					x: (tileAbsoluteX - boardOffsetX) / (SIZE + gap),
-					y: (tileAbsoluteY - boardOffsetY) / (SIZE + gap),
+				const {
+					indicesObj: { row, col },
+				} = toIndices({
+					translationObj: {
+						x: (tileAbsoluteX - boardOffsetX) / (SIZE + gap),
+						y: (tileAbsoluteY - boardOffsetY) / (SIZE + gap),
+					},
 				});
 
 				rowIndex.value = row;

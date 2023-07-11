@@ -13,8 +13,22 @@ import Square from "./SquareComponent";
 import Tile, { letter } from "./TileComponent";
 import DragAndDropTile from "../tests/DragAndDropTile";
 import InsetShadow from "react-native-inset-shadow";
-import { BOARD_LENGTH, SIZE, gap } from "../helpers/Notation";
+import {
+	BOARD_HEIGHT,
+	BOARD_LENGTH,
+	INVALID,
+	MIDDLE_HEIGHT,
+	MID_BOARD,
+	SIZE,
+	boardOffsetX,
+	boardOffsetY,
+	gap,
+	grossSize,
+	// setBoardOffsetX,
+	// setBoardOffsetY,
+} from "../helpers/Notation";
 import { Neomorph, Shadow } from "react-native-neomorph-shadows";
+// import { initBoardOffsets } from "../helpers/BoardParams";
 // import Board from '../objects/board/Board';
 // import SquareComponent from "./SquareComponent";
 // import Square from "../objects/square/Square";
@@ -39,8 +53,7 @@ type BoardProps = {
 	style?: AnimateStyle<ViewStyle>;
 };
 
-export let board_OffsetX: number;
-export let board_OffsetY: number;
+// export const getBoardOffsets;
 
 export default function Board({
 	size,
@@ -52,22 +65,23 @@ export default function Board({
 	getCoordinates,
 	style,
 }: BoardProps): JSX.Element {
-	const [boardOffsetX, setBoardOffsetX] = React.useState(-1);
-	const [boardOffsetY, setBoardOffsetY] = React.useState(-1);
-	const [boardHeight, setBoardHeight] = React.useState(-1);
-	const [boardWidth, setBoardWidth] = React.useState(-1);
+	// const [boardOffsetX, setBoardOffsetX] = React.useState(-1);
+	// const [boardOffsetY, setBoardOffsetY] = React.useState(-1);
+	// const [boardHeight, setBoardHeight] = React.useState(-1);
+	// const [boardWidth, setBoardWidth] = React.useState(-1);
 	const [board, setBoard] = React.useState(null);
 
-	const boardOffset = ({ x, y, height, width }: LayoutRectangle) => {
-		setBoardOffsetX(x);
-		setBoardOffsetY(y);
-		setBoardHeight(height);
-		setBoardWidth(width);
+	// const boardOffset = ({ x, y, height, width }: LayoutRectangle) => {
+	// 	setBoardOffsetX(x);
+	// 	setBoardOffsetY(y);
+	// 	setBoardHeight(height);
+	// 	setBoardWidth(width);
 
-		board_OffsetX = x;
-		board_OffsetY = y;
+	// 	console.log("Board offset X&Y:", x, y);
+	// };
 
-		console.log("Board offset X&Y:", x, y);
+	const getBoardOffset = () => {
+		return;
 	};
 
 	const rowIndex = useSharedValue(-1);
@@ -207,7 +221,16 @@ export default function Board({
 				// animated,
 			]}
 			onLayout={(event) => {
-				boardOffset(event.nativeEvent.layout);
+				// boardOffset(event.nativeEvent.layout);
+				// initBoardOffsets(event.nativeEvent.layout.x, event.nativeEvent.layout.y);
+				// setBoardOffsetX(event.nativeEvent.layout.x);
+				// setBoardOffsetY(event.nativeEvent.layout.y);
+				console.log(
+					"Board offsets from Board:",
+					event.nativeEvent.layout.x,
+					event.nativeEvent.layout.y
+				);
+				console.log();
 			}}>
 			{rows.map((_, i) => {
 				return (
@@ -349,7 +372,7 @@ const styles = StyleSheet.create({
 		// width: "100%",
 		columnGap: gap,
 		flexDirection: "row",
-		gap: 1,
+		// gap: gap,
 	},
 	cell: {
 		// flex: 1,
