@@ -39,6 +39,7 @@ import {
 type TileType = "normal" | "shadow";
 
 type DragAndDropTileProps = {
+	initialOffset?: { offsetX: number; offsetY: number };
 	tileType?: TileType;
 	tileDragStarted?: Function;
 	tileDragging?: Function;
@@ -54,6 +55,7 @@ type DragAndDropTileProps = {
 const DragAndDropTile2 = ({
 	letter,
 	tileLength,
+	initialOffset,
 	tileType,
 	tileDragStarted,
 	tileDragging,
