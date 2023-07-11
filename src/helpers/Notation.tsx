@@ -37,7 +37,7 @@ export const toTranslation = ({
 	const x: number = (offsets ? boardOffsetX - offsets.offsetX : boardOffsetX) + (gap + (col * (SIZE + gap)));
 	//prettier-ignore
 	const y: number = (offsets ? boardOffsetY - offsets.offsetY : boardOffsetY) + (gap + (row * (SIZE + gap)));
-
+	// console.log("Offset?:", offsets?.offsetX, offsets?.offsetY);
 	return { x, y };
 };
 
@@ -52,8 +52,13 @@ export const toIndices = ({
 }: {
 	translationObj: { x: number; y: number };
 	offsets?: { offsetX: number; offsetY: number };
-}): { indicesObj: { row: number; col: number } } => {
+}): {
+	indicesObj: { row: number; col: number };
+	offsets?: { offsetX: number; offsetY: number };
+} => {
 	"worklet";
+
+	if (x === INVALID || y === INVALID) return { indicesObj: { row: INVALID, col: INVALID } };
 
 	let roundedX: number;
 	let roundedY: number;
@@ -71,11 +76,9 @@ export const toIndices = ({
 		roundedY = Math.round((y - boardOffsetY + offsets.offsetY) / (SIZE + gap));
 	}
 
-	if (x === INVALID || y === INVALID) return { indicesObj: { row: INVALID, col: INVALID } };
-
 	const row = roundedY === -0 ? 0 : roundedY < BOARD_LENGTH ? roundedY : -1;
 	const col = roundedX === -0 ? 0 : roundedX < BOARD_LENGTH ? roundedX : -1;
 
 	// console.log("row, col:", roundedY, roundedX);
-	return { indicesObj: { row, col } };
+	return { indicesObj: { row, col }, offsets };
 };

@@ -98,7 +98,7 @@ const DragAndDropTile2 = ({
 		scaleX.value = withTiming(validMove ? 1 : initialScaleValue);
 		scaleY.value = withTiming(validMove ? 1 : initialScaleValue);
 
-		console.log("Translating to: " + x, y);
+		// console.log("Translating to: " + x, y);
 	};
 
 	const opacity = useSharedValue(1);
@@ -150,12 +150,14 @@ const DragAndDropTile2 = ({
 				offsets: { offsetX: initialOffsetX.value, offsetY: initialIOffsetY.value },
 			})
 		);
-		console.log("Obj values:", obj.x, obj.y);
+		// console.log("Obj values:", obj.x, obj.y);
 		// console.log(toIndices({ x: translateX.value, y: translateY.value }));
 		// console.log(translateX.value, translateY.value);
 
 		return {
 			position: "absolute",
+			top: initialIOffsetY.value,
+			left: initialOffsetX.value,
 			height: SIZE,
 			width: SIZE,
 			backgroundColor: "#ddff00",
