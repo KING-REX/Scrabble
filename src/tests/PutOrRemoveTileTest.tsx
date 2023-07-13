@@ -7,10 +7,10 @@
 
 import React from "react";
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import SquareComponent from "../components/SquareComponent";
+import SquareComponent from "../components/Square";
 import Tiles from "../objects/tile/Tiles";
 import Tile from "../objects/tile/Tile";
-import Square from "../components/SquareComponent";
+import Square from "../components/Square";
 import { ShadowTile } from "../components/TileComponent";
 // import Square, { SquareType } from '../objects/square/Square';
 

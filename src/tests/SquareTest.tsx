@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import Square from "../components/SquareComponent";
+import Square from "../components/Square";
 import { ShadowTile } from "../components/TileComponent";
 
 const SquareTest = () => {

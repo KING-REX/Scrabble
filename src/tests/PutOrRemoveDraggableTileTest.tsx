@@ -9,7 +9,7 @@ import React from "react";
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import Tiles from "../objects/tile/Tiles";
 import Tile from "../objects/tile/Tile";
-import Square from "../components/SquareComponent";
+import Square from "../components/Square";
 import { DraggableTile, ShadowTile } from "../components/TileComponent";
 // import Square from '../objects/square/Square';
 

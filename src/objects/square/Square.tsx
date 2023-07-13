@@ -1,7 +1,7 @@
 import { StyleProp } from "react-native/Libraries/StyleSheet/StyleSheet";
 import Tile from "../tile/Tile";
 import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
-import SquareComponent from "../../components/SquareComponent";
+import SquareComponent from "../../components/Square";
 import React from "react";
 
 export enum SquareType {
@@ -131,8 +131,8 @@ export default class Square {
 	}
 
 	public updateTileWidthAndHeight(tile: Tile): void {
-		tile.setHeight(Square.getLength());
-		tile.setWidth(Square.getLength());
+		tile.setLength(Square.getLength());
+		tile.setLength(Square.getLength());
 	}
 
 	// public setupSquareComponent(): JSX.Element {

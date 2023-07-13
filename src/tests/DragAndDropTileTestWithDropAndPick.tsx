@@ -1,6 +1,6 @@
 import { View, StyleSheet, LayoutRectangle, ViewProps, ViewStyle } from "react-native";
 import React from "react";
-import Square from "../components/SquareComponent";
+import Square from "../components/Square";
 import { ShadowTile, letter } from "../components/TileComponent";
 import {
 	GestureStateChangeEvent,

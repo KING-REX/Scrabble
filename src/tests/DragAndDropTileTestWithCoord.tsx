@@ -1,6 +1,6 @@
 import { View, StyleSheet, LayoutRectangle, ViewProps, ViewStyle } from "react-native";
 import React from "react";
-import Square from "../components/SquareComponent";
+import Square from "../components/Square";
 import { ShadowTile, letter } from "../components/TileComponent";
 import {
 	GestureStateChangeEvent,
@@ -23,8 +23,9 @@ import Animated, {
 } from "react-native-reanimated";
 import Board from "../components/BoardComponent";
 import DragAndDropTile from "./DragAndDropTile";
-import DragAndDropTile2 from "./DragAndDropTile2";
+import RefurbishedTile from "../components/RefurbishedTile";
 import { MIDDLE_HEIGHT, MID_BOARD, SIZE, boardOffsetY } from "../helpers/Notation";
+import Rack from "../components/Rack";
 
 const rowHeight = 23;
 const colHeight = rowHeight;
@@ -258,7 +259,24 @@ const DragAndDropTileTest = (): JSX.Element => {
 				})
 			)} */}
 
-			<DragAndDropTile2 letter="H" tileLength={SIZE} />
+			{/* <RefurbishedTile
+				letter="H"
+				tileLength={SIZE}
+				initialOffset={{
+					offsetX: { from: "left", value: 60 },
+					offsetY: { from: "bottom", value: 50 },
+				}}
+			/>
+			<RefurbishedTile
+				letter="H"
+				tileLength={SIZE}
+				initialOffset={{
+					offsetX: { from: "left", value: 120 },
+					offsetY: { from: "bottom", value: 50 },
+				}}
+			/> */}
+
+			<Rack />
 
 			{/* <Animated.View
 				style={useAnimatedStyle(() => {

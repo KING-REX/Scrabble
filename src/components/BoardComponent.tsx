@@ -9,7 +9,7 @@ import Animated, {
 	SharedValue,
 	runOnJS,
 } from "react-native-reanimated";
-import Square from "./SquareComponent";
+import Square from "./Square";
 import Tile, { letter } from "./TileComponent";
 import DragAndDropTile from "../tests/DragAndDropTile";
 import InsetShadow from "react-native-inset-shadow";
@@ -28,6 +28,8 @@ import {
 	// setBoardOffsetY,
 } from "../helpers/Notation";
 import { Neomorph, Shadow } from "react-native-neomorph-shadows";
+import SquareComponent from "./SquareComponent";
+import { getSquareType } from "../helpers/SquareType";
 // import { initBoardOffsets } from "../helpers/BoardParams";
 // import Board from '../objects/board/Board';
 // import SquareComponent from "./SquareComponent";
@@ -161,19 +163,19 @@ export default function Board({
 	const rows = [...Array(BOARD_LENGTH)].map((_, i) => i);
 	const cells = [...Array(BOARD_LENGTH)].map((_, i) => i);
 
-	const squareBgStyle = (i: number, j: number) =>
-		useAnimatedStyle(() => {
-			const backgroundColor = interpolateColor(
-				rowIndex.value,
-				[-1, 0, 1, 2, 3, 4],
-				["#fff", "#0f0", "#f0f", "#ff0", "#00f", "#AAA"]
-			);
+	// const squareBgStyle = (i: number, j: number) =>
+	// 	useAnimatedStyle(() => {
+	// 		const backgroundColor = interpolateColor(
+	// 			rowIndex.value,
+	// 			[-1, 0, 1, 2, 3, 4],
+	// 			["#fff", "#0f0", "#f0f", "#ff0", "#00f", "#AAA"]
+	// 		);
 
-			// console.log("In squareBgStyle, i is", i);
+	// 		// console.log("In squareBgStyle, i is", i);
 
-			if (rowIndex.value === i && colIndex.value === j) return { backgroundColor };
-			else return { backgroundColor: "#FFF" };
-		}, [rowIndex.value]);
+	// 		if (rowIndex.value === i && colIndex.value === j) return { backgroundColor };
+	// 		else return { backgroundColor: "#FFF" };
+	// 	}, [rowIndex.value]);
 
 	const getDroppedTile = (i: number, j: number) =>
 		useDerivedValue(() => {
@@ -184,53 +186,16 @@ export default function Board({
 			}
 		});
 
-	const pickTile = (tile: {
-		letter: letter;
-		tileLength: number;
-		tileX: number;
-		tileY: number;
-	}) => {
-		// console.log(
-		// 	"Tile details:",
-		// 	JSON.stringify({
-		// 		...tile,
-		// 		tileX: tile.tileX + boardOffsetX,
-		// 		tileY: tile.tileY + boardOffsetY,
-		// 	})
-		// );
-		tile && pickTileFunc
-			? pickTileFunc({
-					...tile,
-					tileX: tile.tileX + boardOffsetX,
-					tileY: tile.tileY + boardOffsetY,
-			  })
-			: {};
-	};
-
 	return (
 		<Animated.View
-			style={[
-				styles.board,
-				style,
-				{
-					// backgroundColor: useDerivedValue(() => {
-					// 	return isTileDragging?.value ? "#000" : "#AAA";
-					// }).value,
-				},
-
-				// animated,
-			]}
+			style={[styles.board, style]}
 			onLayout={(event) => {
-				// boardOffset(event.nativeEvent.layout);
-				// initBoardOffsets(event.nativeEvent.layout.x, event.nativeEvent.layout.y);
-				// setBoardOffsetX(event.nativeEvent.layout.x);
-				// setBoardOffsetY(event.nativeEvent.layout.y);
-				console.log(
-					"Board offsets from Board:",
-					event.nativeEvent.layout.x,
-					event.nativeEvent.layout.y
-				);
-				console.log();
+				// console.log(
+				// 	"Board offsets from Board:",
+				// 	event.nativeEvent.layout.x,
+				// 	event.nativeEvent.layout.y
+				// );
+				// console.log();
 			}}>
 			{rows.map((_, i) => {
 				return (
@@ -243,17 +208,6 @@ export default function Board({
 							let coordinateX = (j * SIZE) + ((j + 1) * gap);
 							//prettier-ignore
 							let coordinateY = (i * SIZE) + ((i + 1) * gap);
-
-							// useDerivedValue(() => {
-							// 	if (rowIndex.value === i && colIndex.value === j) {
-							// 		getCoordinates
-							// 			? runOnJS(getCoordinates)(
-							// 					coordinateX + boardOffsetX,
-							// 					coordinateY + boardOffsetY
-							// 			  )
-							// 			: {};
-							// 	}
-							// });
 
 							return (
 								<Shadow
@@ -269,7 +223,11 @@ export default function Board({
 										shadowRadius: 3,
 										borderRadius: 2,
 									}}>
-									<View></View>
+									<SquareComponent
+										rowIndex={i}
+										colIndex={j}
+										type={getSquareType(i, j)}
+									/>
 								</Shadow>
 								// <Square
 								// 	spitLayout={spitOutLayoutParams}
