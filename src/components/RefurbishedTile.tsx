@@ -2,20 +2,30 @@ import { LayoutChangeEvent } from "react-native";
 import React from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Tile, { NeoShadowTile, TileProps } from "./TileComponent";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+	SharedValue,
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming,
+} from "react-native-reanimated";
 import { INVALID, SIZE, toIndices, toTranslation } from "../helpers/Notation";
 
 type DragAndDropTileProps = {
+	index?: number;
 	initialOffset?: {
 		offsetX: { value: number; from: "left" | "right" };
 		offsetY: { value: number; from: "top" | "bottom" };
 	};
+	reset?: boolean;
+	// translate?: { translateX: SharedValue<number>; translateY: SharedValue<number> };
+	// scale?: { scaleX: SharedValue<number>; scaleY: SharedValue<number> };
 };
 
 const DragAndDropTile2 = ({
 	letter,
 	tileLength,
 	initialOffset,
+	index,
 }: DragAndDropTileProps & TileProps): JSX.Element => {
 	// console.log("InitialOffset?:", JSON.stringify(initialOffset));
 	const initialOffsetX = useSharedValue(initialOffset ? initialOffset.offsetX.value : 30);
@@ -25,6 +35,25 @@ const DragAndDropTile2 = ({
 	const offsetXFrom = useSharedValue(initialOffset ? initialOffset.offsetX.from : "right");
 
 	const initialScaleValue = 2;
+
+	const translateX = useSharedValue(0);
+	const translateY = useSharedValue(0);
+
+	const scaleX = useSharedValue(initialScaleValue);
+	const scaleY = useSharedValue(initialScaleValue);
+
+	React.useEffect(() => {
+		return () => {
+			translateX.value = withTiming(0, {
+				duration: index !== undefined ? 1000 + index * 250 : undefined,
+			});
+			translateY.value = withTiming(0, {
+				duration: index !== undefined ? 1000 + index * 250 : undefined,
+			});
+			scaleX.value = withTiming(initialScaleValue);
+			scaleY.value = withTiming(initialScaleValue);
+		};
+	});
 
 	const initialTileOffset = (event: LayoutChangeEvent) => {
 		const x = event.nativeEvent.layout.x;
@@ -60,12 +89,6 @@ const DragAndDropTile2 = ({
 	};
 
 	const opacity = useSharedValue(1);
-
-	const scaleX = useSharedValue(initialScaleValue);
-	const scaleY = useSharedValue(initialScaleValue);
-
-	const translateX = useSharedValue(0);
-	const translateY = useSharedValue(0);
 
 	const offsetX = useSharedValue(0);
 	const offsetY = useSharedValue(0);

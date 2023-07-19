@@ -197,67 +197,7 @@ const DragAndDropTileTest = (): JSX.Element => {
 
 	return (
 		<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-			<Board
-			// isTileDragging={tileIsDragging}
-			// tileDimensions={tileDimensions}
-			// droppedTile={tileDropped}
-			// pickTileFunc={pickTileFunc}
-			// indices={getIndicesFromBoard}
-			// getCoordinates={getCoordinates}
-			/>
-
-			{/* {!hasDropped && pickedT} */}
-
-			{/* {content(
-				undefined,
-				// { marginTop: 30 },
-				useAnimatedStyle(() => {
-					if (tileDropped && tileDropped.value) {
-						// console.log("TIleDropped: " + JSON.stringify(tileDropped.value));
-						// console.log("Indices after dropping tile:", rowIndex, colIndex);
-						// console.log(
-						// 	"Tile coordinates from droppedTile:",
-						// 	tileDropped.value.tileX,
-						// 	tileDropped.value.tileY
-						// );
-						// console.log(
-						// 	"Coordinates from dropped tile's square:",
-						// 	coordinateX.value,
-						// 	coordinateY.value
-						// );
-						// console.log(
-						// 	"Translating to:",
-						// 	coordinateX.value - tileDropped.value.tileX,
-						// 	coordinateY.value - tileDropped.value.tileY
-						// );
-
-						return {
-							transform: [
-								{
-									translateX:
-										translationX.value +
-										coordinateX.value -
-										tileDropped.value.tileX,
-								},
-								{
-									translateY:
-										translationY.value +
-										coordinateY.value -
-										tileDropped.value.tileY,
-								},
-							],
-
-							// position: "absolute",
-							// top: coordinateY.value - tileDropped.value.tileY + tileOffset.y,
-							// left: coordinateX.value - tileDropped.value.tileX + tileOffset.x,
-
-							//THIS IS ASSIGNING THE TOUCH'S COORDINATES NOT THE TILE'S COORDINATES, TO THE 0,0 OF THE SQUARE. SO YOU'LL NEED TO GET THE TILE OFFSET WHILE PASSING TILE INFO!
-						};
-					} else {
-						return {};
-					}
-				})
-			)} */}
+			<Board />
 
 			{/* <RefurbishedTile
 				letter="H"
@@ -277,19 +217,6 @@ const DragAndDropTileTest = (): JSX.Element => {
 			/> */}
 
 			<Rack />
-
-			{/* <Animated.View
-				style={useAnimatedStyle(() => {
-					return {
-						position: "absolute",
-						width: 5,
-						height: 5,
-						backgroundColor: "#F00F00",
-						borderRadius: 5,
-						top: coordinateY.value,
-						left: coordinateX.value,
-					};
-				})}></Animated.View> */}
 		</View>
 	);
 };
