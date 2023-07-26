@@ -21,7 +21,7 @@ import Animated, {
 	useDerivedValue,
 	useSharedValue,
 } from "react-native-reanimated";
-import Board from "../components/BoardComponent";
+import Board from "../components/TrashBoard";
 import DragAndDropTile from "./DragAndDropTile";
 
 const rowHeight = 50;

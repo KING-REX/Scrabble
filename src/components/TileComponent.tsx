@@ -18,6 +18,7 @@ import { Shadow } from "react-native-shadow-2";
 import * as NeomorphShadow from "react-native-neomorph-shadows";
 import Draggable from "react-native-draggable";
 import { TilesArray } from "../objects/tile/Tiles";
+import DynamicTile from "./DynamicTile";
 
 export type letter =
 	| "BLANK"
@@ -122,29 +123,30 @@ export function NeoShadowTile({ tileLength, letter, onLayout }: TileProps): JSX.
 	const [_tileLength, setTileLength] = React.useState(tileLength);
 
 	return (
-		<ImageBackground
-			source={_tileImage}
-			style={{
-				width: _tileLength,
-				height: _tileLength,
-				zIndex: 100,
-			}}
-			resizeMode="stretch"
-			onLayout={(event) => (onLayout ? onLayout(event.nativeEvent.layout) : {})}>
-			<NeomorphShadow.Shadow
-				inner
-				useArt
-				style={{
-					width: _tileLength,
-					height: _tileLength,
-					shadowColor: "#000",
-					shadowOpacity: 1,
-					shadowRadius: 6,
-					zIndex: 150,
-				}}>
-				{/* <Text>{Platform.OS}</Text> */}
-			</NeomorphShadow.Shadow>
-		</ImageBackground>
+		// <ImageBackground
+		// 	source={_tileImage}
+		// 	style={{
+		// 		width: _tileLength,
+		// 		height: _tileLength,
+		// 		zIndex: 100,
+		// 	}}
+		// 	resizeMode="stretch"
+		// 	onLayout={(event) => (onLayout ? onLayout(event.nativeEvent.layout) : {})}>
+		// 	<NeomorphShadow.Shadow
+		// 		inner
+		// 		useArt
+		// 		style={{
+		// 			width: _tileLength,
+		// 			height: _tileLength,
+		// 			shadowColor: "#000",
+		// 			shadowOpacity: 1,
+		// 			shadowRadius: 6,
+		// 			zIndex: 150,
+		// 		}}>
+		// 		{/* <Text>{Platform.OS}</Text> */}
+		// 	</NeomorphShadow.Shadow>
+		// </ImageBackground>
+		<DynamicTile tileLength={_tileLength} letter={_letter} />
 	);
 }
 

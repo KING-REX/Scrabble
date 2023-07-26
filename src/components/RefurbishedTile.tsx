@@ -21,7 +21,7 @@ type DragAndDropTileProps = {
 	// scale?: { scaleX: SharedValue<number>; scaleY: SharedValue<number> };
 };
 
-const DragAndDropTile2 = ({
+const RefurbishedTile = ({
 	letter,
 	tileLength,
 	initialOffset,
@@ -95,34 +95,43 @@ const DragAndDropTile2 = ({
 
 	const isDragging = useSharedValue(false);
 
-	const panGesture = Gesture.Pan();
-	panGesture
-		.onStart(() => {
-			offsetX.value = translateX.value;
-			offsetY.value = translateY.value;
+	const dragStart = () => {
+		offsetX.value = translateX.value;
+		offsetY.value = translateY.value;
 
-			scaleX.value = withTiming(2);
-			scaleY.value = withTiming(2);
+		scaleX.value = withTiming(2);
+		scaleY.value = withTiming(2);
 
-			opacity.value = 0.5;
+		opacity.value = 0.5;
 
-			isDragging.value = true;
-		})
-		.onChange(({ translationX, translationY }) => {
-			translateX.value = translationX + offsetX.value;
-			translateY.value = translationY + offsetY.value;
-		})
-		.onEnd(() => {
-			const to = toIndices({
-				translationObj: { x: translateX.value, y: translateY.value },
-				offsets: { offsetX: initialOffsetX.value, offsetY: initialOffsetY.value },
-			});
-			dropTile(to);
+		isDragging.value = true;
+	};
 
-			opacity.value = 1;
+	const dragging = ({
+		translationX,
+		translationY,
+	}: {
+		translationX: number;
+		translationY: number;
+	}) => {
+		translateX.value = translationX + offsetX.value;
+		translateY.value = translationY + offsetY.value;
+	};
 
-			isDragging.value = false;
+	const dragEnd = () => {
+		const to = toIndices({
+			translationObj: { x: translateX.value, y: translateY.value },
+			offsets: { offsetX: initialOffsetX.value, offsetY: initialOffsetY.value },
 		});
+		dropTile(to);
+
+		opacity.value = 1;
+
+		isDragging.value = false;
+	};
+
+	const panGesture = Gesture.Pan();
+	panGesture.onStart(dragStart).onChange(dragging).onEnd(dragEnd);
 
 	const underlay = useAnimatedStyle(() => {
 		const obj = toTranslation(
@@ -174,4 +183,4 @@ const DragAndDropTile2 = ({
 	);
 };
 
-export default DragAndDropTile2;
+export default RefurbishedTile;

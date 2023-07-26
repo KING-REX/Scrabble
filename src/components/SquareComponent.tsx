@@ -32,14 +32,13 @@ export default function Square({
 			style={[
 				style,
 				{
-					flex: 1,
 					justifyContent: "center",
 					alignItems: "center",
 					height: SIZE,
 					width: SIZE,
 					// backgroundColor: bgColor,
 					backgroundColor: SquareType[type].color,
-					borderRadius: 2,
+					borderRadius: 5,
 					zIndex: -10,
 				},
 			]}>

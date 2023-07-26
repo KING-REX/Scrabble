@@ -1,0 +1,49 @@
+RULES
+1. Games only have two players. Each match has two games, one with each player playing first.
+
+2. Players initially draw 7 tiles each and place them on their rack.
+
+3. The first player combines two or more of his or her letters to form a word and places it on the board to read either across or down with one letter on the center square. (Diagonal words are not allowed.) After playing a word, the player receives replacement letters, one for each letter played.
+
+4. Following the first turn, players alternate. Each plays a series of tiles forming a word (possibly more than one word, as below) and then draws new tiles. Always keep 7 tiles on each rack, unless there are not enough tiles left.
+
+5. The letters placed in a single turn must all be in a single horizontal row or in a single vertical column, and the letters placed (plus letters already on the board) must form a single word from the dictionary, with no gaps. Each new word must connect to the existing words, in one of the following ways:
+
+    a. Adding one or more letters to a word or letters already on the board.
+    b. Placing a word at right angles to a word already on the board. The new word must use one of the letters already on the board or must add a letter to one of the words on the board.
+    c. Placing a complete word parallel to a word already played so that adjacent letters also form complete words.
+
+9. Any new words formed by these connections must also be in the dictionary.
+
+10. Each of the two blank tiles may be used as any letter. When playing a blank, you must state which letter it represents. It remains that letter for the rest of the game.
+
+11. You may use a turn to exchange all, some, or none of the letters. To do this, place your discarded letter(s) facedown. Draw the same number of letters from the pool of remaining letters, and then mix your discarded letter(s) into the pool. This ends your turn. You may not exchange more tiles from your rack than are in the pool (or are in your rack, of course), but there is no other limit on how many tiles you may exchange.
+
+12. The game ends when:
+
+    a. All of the letters are either in the player's racks or on the board, and one player uses his or her last letter or
+    b. Both players exchange some number of tiles twice in a row (for a total of four exchanges).
+
+
+SCORING
+1. The score for each turn is the sum of the letter values in each word(s) formed or modified on that turn, plus the additional points obtained from placing letters on Premium Squares.
+
+2. Premium Letter Squares: A light blue square doubles the score of a letter placed on it; a dark blue square triples the letter score.
+
+3. Premium Word Squares: The score for an entire word is doubled when one of its letters is placed on a pink square: it is tripled when one of its letters is placed on a red square. Include premiums for double or triple letter values, if any, before doubling or tripling the word score.
+
+4. If a word is formed that covers two premium word squares, the score is doubled and then re-doubled (4 times the letter count), or tripled and then re-tripled (9 times the letter count).
+
+5. Letter and word premiums count only on the turn in which they are played. On later turns, letters already played on premium squares count at face value.
+
+6. When a blank tile is played on a pink or red square, the value of the word is doubled or tripled, even though the blank itself has no score value.
+
+7. When two or more words are formed in the same play, each is scored. The common letter is counted (with full premium value, if any) for each word.
+
+8. If you play seven tiles on a turn, it's called a Bingo. You score an additional 50 points after otherwise totaling your score for the turn.
+
+9. Unplayed Letters: When the game ends, each player's score is reduced by the sum of his or her unplayed letters. In addition, if a player has used all of his or her letters, the sum of the other players' unplayed letters is added to that player's score.
+
+10. The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplayed letters wins.
+
+11. If a match has one winner and one loser, the player that scored more points (combined in both games) wins the match. If that number is the same for the two players, the match is a tie`
